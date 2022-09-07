@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string('numero')->nullable();
             $table->string('cidade')->nullable();
             $table->string('estado')->nullable();
+            $table->string('ponto_referencia')->nullable();
+            $table->string('observacao')->nullable();
+            $table->string('setor')->nullable();
             $table->timestamps();
         });
     }

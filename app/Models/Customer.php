@@ -10,6 +10,17 @@ class Customer extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'nome',
+        'rua',
+        'numero',
+        'cidade',
+        'estado',
+        'ponto_referencia',
+        'observacao',
+        'setor',
+    ];
+
     /**
      * The accessors to append to the model's array form.
      *
