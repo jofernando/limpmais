@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateCustomer extends CreateRecord
 {
     protected static string $resource = CustomerResource::class;
+
+    protected function getCreatedNotificationMessage(): ?string
+    {
+        return "Cliente com código {$this->record->id} salvo com sucesso.";
+    }
 }
