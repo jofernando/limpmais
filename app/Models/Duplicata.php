@@ -17,6 +17,10 @@ class Duplicata extends Model
         'customer_id',
     ];
 
+    protected $casts = [
+        'vencimento' => 'datetime',
+    ];
+
     /**
      * Get the customer that owns the Duplicata
      *
