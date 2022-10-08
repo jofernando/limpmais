@@ -37,8 +37,14 @@ class CustomerResource extends Resource
                     ->label('Número')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('cidade')
+                    ->label('Cidade/Sítio')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('estado')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('ponto_referencia')
+                    ->label('Ponto de referência')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('setor')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('divida')
                     ->label('Dívida')
@@ -55,10 +61,6 @@ class CustomerResource extends Resource
                 Tables\Columns\TextColumn::make('endereco')->label('Endereço'),
                 Tables\Columns\TextColumn::make('divida')
                     ->label('Dívida'),
-//                Tables\Columns\TextColumn::make('created_at')
-//                    ->dateTime(),
-//                Tables\Columns\TextColumn::make('updated_at')
-//                    ->dateTime(),
             ])
             ->filters([
                 //
