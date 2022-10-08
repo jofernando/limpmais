@@ -3,9 +3,10 @@
 namespace App\Filament\Resources\DuplicataResource\Pages;
 
 use App\Filament\Resources\DuplicataResource;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Pages\Actions;
+use Filament\Resources\Pages\CreateRecord;
 
-class ManageDuplicatas extends ManageRecords
+class CreateDuplicata extends CreateRecord
 {
     protected static string $resource = DuplicataResource::class;
 }

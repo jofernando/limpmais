@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DuplicataResource\Pages;
+use App\Filament\Resources\DuplicataResource\RelationManagers;
 use App\Models\Customer;
 use App\Models\Duplicata;
 use Filament\Forms;
@@ -16,7 +17,8 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DuplicataResource extends Resource
 {
@@ -28,28 +30,21 @@ class DuplicataResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('customer_id')
-                    ->required()
-                    ->label('Código do customer')
-                    ->options(Customer::all()->pluck('id'))
-                    ->searchable()
-                    ->reactive()
-                    ->afterStateUpdated(function (\Closure $set, $state) {
-                        $set('customer_name', $state);
-                    }),
-                Select::make('customer_name')
-                    ->required()
-                    ->label('Nome do customer')
-                    ->options(Customer::all()->pluck('nome', 'id'))
-                    ->searchable()
-                    ->afterStateUpdated(function (\Closure $set, $state) {
-                        $set('customer_id', $state);
-                    }),
+                Grid::make()
+                    ->schema([
+                        Select::make('customer_id')
+                            ->required()
+                            ->label('Código do customer')
+                            ->searchable()
+                            ->getSearchResultsUsing(fn (string $search) => Customer::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(50)->pluck('nome', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome),
+                    ])->columns(1),
                 TextInput::make('valor')
                     ->required()
                     ->numeric(),
                 DatePicker::make('vencimento')
-                    ->required(),
+                    ->required()
+                    ->default(now()->addDays(30)),
                 Grid::make()
                     ->schema([
                         MarkdownEditor::make('observacao')
@@ -65,30 +60,37 @@ class DuplicataResource extends Resource
                 Tables\Columns\TextColumn::make('id')->label('Código'),
                 Tables\Columns\TextColumn::make('customer.identificacao'),
                 Tables\Columns\TextColumn::make('valor'),
-                // Tables\Columns\TextColumn::make('observacao'),
-                // Tables\Columns\TextColumn::make('vencimento')
-                //     ->date(),
                 BadgeColumn::make('status')
                     ->colors([
                         'success' => fn ($state): bool => $state === 'pago',
                         'danger' => fn ($state): bool => $state === 'vencido',
                         'warning' => fn ($state): bool => $state === 'pendente',
                     ]),
-                // Tables\Columns\BooleanColumn::make('quitada'),
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->dateTime(),
-                // Tables\Columns\TextColumn::make('updated_at')
-                //     ->dateTime(),
             ])
             ->filters([
                 //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageDuplicatas::route('/'),
+            'index' => Pages\ListDuplicatas::route('/'),
+            'create' => Pages\CreateDuplicata::route('/create'),
+            'edit' => Pages\EditDuplicata::route('/{record}/edit'),
         ];
     }
 }
