@@ -44,8 +44,8 @@ class Customer extends Model
         if ($this->numero != null) {
             $rua = $rua . " Nº " .$this->numero;
         }
-        $linksArray = [$this->nome, $rua, $this->cidade];
-        array_filter($linksArray, fn($value) => !is_null($value) && $value !== '' && $value !== ' ');
+        $linksArray = [$this->nome, $this->ponto_referencia, $rua, $this->cidade];
+        $linksArray = array_filter($linksArray, fn($value) => !is_null($value) && $value !== '' && $value !== ' ');
         return implode(", ", $linksArray);
     }
 
@@ -56,7 +56,7 @@ class Customer extends Model
             $rua = $rua . " Nº " .$this->numero;
         }
         $linksArray = [$rua, $this->cidade];
-        array_filter($linksArray, fn($value) => !is_null($value) && $value !== '' && $value !== ' ');
+        $linksArray = array_filter($linksArray, fn($value) => !is_null($value) && $value !== '' && $value !== ' ');
         return implode(", ", $linksArray);
     }
 
