@@ -26,8 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::view('/', 'welcome')->name('home');
 Route::get('/', function() {
-    // ImportarCustomers::dispatch();
-    return view('welcome');
+    return redirect('/admin');
 })->name('home');
 
 Route::middleware('guest')->group(function () {
