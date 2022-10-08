@@ -36,16 +36,19 @@ class Lancamento implements Rule
             return false;
         }
         foreach ($chunked as $item) {
-            if(!is_numeric($item[0]) || !is_numeric($item[0]) || !is_numeric($item[0]))
+            if(!is_numeric($item[0]) || !is_numeric($item[1]) || !is_numeric($item[2]))
             {
                 $texto = implode(", ", $item);
                 $this->message = "Esse texto contém caracters que não são permitidos. {$texto}. Somente números, vírgulas e o sinal de menos são permitidos.";
                 return false;
             }
             $customer = Customer::find($item[0]);
-            $duplicatas = $customer->duplicatas()->where('quitada', false)->get();
-            $divida = $duplicatas->map(fn($duplicata) => $duplicata->valor)->sum();
-            if ($item[1] != '0' && $item[1] > $divida) {
+            if ($customer == null) {
+                $this->message = "Não existe cliente para o código informando: {$item[0]}";
+                return false;
+            }
+            $divida = $customer->divida;
+            if ($item[1] > 0 && $item[1] > $divida) {
                 $nome = $customer->nome;
                 $this->message = "O cliente {$nome} com código {$item[0]} possui dívida de R\${$divida} mas o valor informando foi R\${$item[1]}. Verifique os dados inseridos.";
                 return false;

@@ -82,9 +82,14 @@ class Lancar extends Page
                 $chunked = array_chunk($exploded, 3);
                 foreach ($chunked as $item) {
                     $customer = Customer::find($item[0]);
-                    $duplicatas = $customer->duplicatas()->where('quitada', false)->get();
-                    $divida = $duplicatas->map(fn($duplicata) => $duplicata->valor)->sum();
-                    $duplicata = ['codigo' => $item[0], 'nome' => $customer->identificacao, 'pagar' => $item[1], 'receber' => $item[2], 'restante' => $divida - $item[1] + $item[2]];
+                    $divida = $customer->divida;
+                    if ($item[1] > 0) {
+                        $duplicata = ['codigo' => $item[0], 'nome' => $customer->identificacao, 'pagar' => $item[1], 'receber' => $item[2], 'restante' => $divida - $item[1] + $item[2]];
+                    } elseif ($item[1] < 0) {
+                        $duplicata = ['codigo' => $item[0], 'nome' => $customer->identificacao, 'pagar' => 0, 'receber' => $item[2], 'restante' => $divida + $item[2]];
+                    } else {
+                        $duplicata = ['codigo' => $item[0], 'nome' => $customer->identificacao, 'pagar' => $divida, 'receber' => $item[2], 'restante' => $item[2]];
+                    }
                     $this->duplicatas[] = $duplicata;
                 }
             }
