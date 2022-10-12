@@ -8,10 +8,8 @@
     <title>Document</title>
     <style>
         @page {
-            padding-bottom: 0;
-            margin-bottom: 0;
-            padding-top: 0;
-            margin-top: 0;
+            margin: 0 15px;
+            padding: 0 0;
         }
         :root {
             box-sizing: border-box;
@@ -26,10 +24,13 @@
         }
         .duplicata {
             page-break-inside: avoid;
+            /* border-top: 2px solid #6b7280;
+            border-bottom: 2px solid #6b7280; */
+            height: 5.83cm;
             border-top: 2px solid #6b7280;
             border-bottom: 2px solid #6b7280;
-            margin-bottom: 3.4rem;
-            padding-bottom: 1.7rem;
+            /* margin-bottom: 3.4rem;
+            padding-bottom: 1.7rem; */
         }
         .page-break {
             page-break-after: always;
@@ -44,18 +45,23 @@
             float: right;
         }
         .nome-empresa {
-            padding-top: 1rem;
+            margin-top: 1.2rem;
             font-weight: bold;
-        }
-        .titulo {
-            border-bottom: 1px solid #6b7280;
-            margin-bottom: 5px;
         }
         .cnpj, .nome-empresa, .titulo {
             text-align: center;
         }
         .cliente, .vencimento {
             text-align: start;
+        }
+        .cnpj, .titulo, .cliente, .vencimento{
+            border-bottom: 2px dashed #6b7280;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+
+        .divida {
+            margin-top: 4px;
         }
 
     </style>
@@ -73,10 +79,10 @@
             <div class="titulo">extrato para simples conferência</div>
             <div class="cliente">cliente: {{$duplicata['codigo']}} {{$duplicata['nome']}}</div>
             <div class="vencimento">data de vencimento: {{$duplicata['data_vencimento']}}</div>
-            <div class="divida">total: {{$duplicata['divida']}}</div>
+            <div class="divida">total: R$ {{$duplicata['divida']}}</div>
             <br>
         </div>
-        @if($loop->iteration % 5 == 0)
+        @if($loop->iteration % 5 == 0 && !$loop->last)
             <div class="page-break"></div>
         @endif
     @endforeach
