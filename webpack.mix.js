@@ -21,3 +21,9 @@ mix.js("resources/js/app.js", "public/js/app.js")
 if (mix.inProduction()) {
     mix.version();
 }
+
+mix.webpackConfig({
+    stats: {
+        children: true,
+    },
+});

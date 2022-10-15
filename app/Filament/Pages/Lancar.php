@@ -29,48 +29,44 @@ class Lancar extends Page
 
     public $texto;
 
-    public $customers = [];
+    public $customers = [
+        [
+            'customer_id' => '',
+            'nome' => '',
+            'divida' => '',
+            'pago' => '',
+            'comprado' => ','
+        ],
+    ];
 
-    public function mount(): void
+    public function adicionarCustomer()
     {
-        $this->form->fill();
-    }
-
-    protected function getFormSchema(): array
-    {
-        return [
-            Repeater::make('customers')
-                ->schema([
-                    Select::make('customer_id')
-                        ->required()
-                        ->reactive()
-                        ->label('Código/nome do customer')
-                        ->searchable()
-                        ->getSearchResultsUsing(fn (string $search) => Customer::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(10)->pluck('nome', 'id'))
-                        ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome)
-                        ->afterStateUpdated(function (Closure $set, $state) {
-                            $set('divida', Customer::find($state)?->divida);
-                        }),
-                    Grid::make()
-                    ->schema([
-                        TextInput::make('pago')->numeric()->minValue(0)->maxValue(fn (Closure $get) => $this->recuperarDivida($get('customer_id')))->label('Valor pago')->required(),
-                        TextInput::make('comprado')->numeric()->minValue(0)->label('Valor comprado')->required(),
-                        TextInput::make('divida')->numeric()->disabled()->label('Dívida'),
-                    ])
-                    ->columns(3)
-
-                ])
-                ->columns(1)
-                ->disableItemMovement(),
+        $this->customers[] = [
+            'customer_id' => '',
+            'nome' => '',
+            'divida' => '',
+            'pago' => '',
+            'comprado' => ','
         ];
+        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->customers)]);
     }
 
-    private function recuperarDivida($customer_id)
+    public function removerCustomer($index)
     {
-        if ($customer_id) {
-            return Customer::find($customer_id)?->divida;
+        unset($this->customers[$index]);
+    }
+
+    public function setarValores($index)
+    {
+        $customer = Customer::find($this->customers[$index]['customer_id']);
+        if ($customer) {
+            $this->customers[$index]['divida'] = $customer->divida;
+            $this->customers[$index]['nome'] = $customer->identificacao;
+            $this->customers[$index]['pago'] = $customer->divida;
+        } else {
+            $this->customers[$index]['customer_id'] = null;
         }
-        return 0;
+        $this->dispatchBrowserEvent('select_text_in_input_with_focus');
     }
 
     public function submit()
@@ -94,17 +90,18 @@ class Lancar extends Page
                     $dupl->save();
                 }
             }
-            if($valorComprado > 0)
+            if($valorComprado > 0) {
                 Duplicata::create(['valor' => $valorComprado, 'vencimento' => Carbon::now()->addDays(30), 'customer_id' => $customer->id]);
+            }
+            $this->notify('success', 'Duplicatas lançadas com sucesso.');
         }
-        $this->notify('success', 'Duplicatas lançadas com sucesso.');
-        return $this->redirectRoute('filament.pages.lancar');
     }
 
     public function submitAndPrint()
     {
         $this->submit();
         $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->customers);
+        $duplicatas = array_filter($duplicatas, fn($item) => $item['divida'] > 0);
         $data = now()->format('d/m/Y');
         $hora = now()->format('H:i:s');
         $pdf = \PDF::loadView('impressao.duplicatas', compact('duplicatas', 'data', 'hora'))->output();
@@ -116,6 +113,7 @@ class Lancar extends Page
         $customer = Customer::find($item['customer_id']);
         $item['codigo'] = $customer->id;
         $item['nome'] = $customer->identificacao;
+        $item['divida'] = $customer->divida;
         $item['data_vencimento'] = $customer->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
         return $item;
     }
