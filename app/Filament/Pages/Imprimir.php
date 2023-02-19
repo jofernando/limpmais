@@ -3,10 +3,11 @@
 namespace App\Filament\Pages;
 
 use App\Models\Customer;
-use Closure;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Pages\Page;
+use Filament\Pages\Actions\Action;
 use PDF;
 
 class Imprimir extends Page
@@ -33,14 +34,31 @@ class Imprimir extends Page
                         ->label('Código/nome do customer')
                         ->searchable()
                         ->getSearchResultsUsing(fn (string $search) => Customer::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(10)->pluck('nome', 'id'))
-                        ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome)
-                        ->afterStateUpdated(function (Closure $set, $state) {
-                            $set('divida', Customer::find($state)?->divida);
-                        }),
-
+                        ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome),
                 ])
                 ->columns(1)
                 ->disableItemMovement(),
+        ];
+    }
+
+    protected function getActions(): array
+    {
+        return [
+            Action::make('adicionarMuitosCustomers')
+                ->action(function (array $data): void {
+                    $exploded = explode(',', $data['codigos']);
+                    foreach ($exploded as $item) {
+                        $customer = ['customer_id' => $item];
+                        $this->customers[] = $customer;
+                    }
+                })
+                ->form([
+                    Textarea::make('codigos')
+                        ->label('Códigos')
+                        ->rows(10)
+                        ->required(),
+                ])
+                ->modalSubheading('Códigos separados por vírgula. Exemplo: 15487,15487,15487,15487'),
         ];
     }
 
@@ -57,6 +75,7 @@ class Imprimir extends Page
     {
         $customer = Customer::find($item['customer_id']);
         $item['codigo'] = $customer->id;
+        $item['divida'] = $customer->divida;
         $item['nome'] = $customer->identificacao;
         $item['data_vencimento'] = $customer->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
         return $item;
