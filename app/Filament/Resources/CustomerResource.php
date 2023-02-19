@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CustomerResource\Pages;
-use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Filament\Resources\CustomerResource\RelationManagers\DuplicatasRelationManager;
 use App\Models\Customer;
 use Filament\Forms;
@@ -12,14 +11,23 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Model;
 
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $recordTitleAttribute = 'nome';
-
     protected static ?string $navigationIcon = 'heroicon-o-collection';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['nome', 'id'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->nome;
+    }
 
     public static function form(Form $form): Form
     {
