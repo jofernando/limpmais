@@ -11,8 +11,9 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure
+class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure, WithBatchInserts
 {
     use Importable;
 
@@ -40,6 +41,11 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
         return [
             'totdeb' => ['required', 'numeric', 'min:1']
         ];
+    }
+
+    public function batchSize(): int
+    {
+        return 1000;
     }
 
     /**

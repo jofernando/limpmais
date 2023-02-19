@@ -6,8 +6,9 @@ use App\Models\Customer;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class CustomerImport implements ToModel, WithChunkReading, WithHeadingRow
+class CustomerImport implements ToModel, WithChunkReading, WithHeadingRow, WithBatchInserts
 {
     /**
     * @param array $row
@@ -26,6 +27,11 @@ class CustomerImport implements ToModel, WithChunkReading, WithHeadingRow
     }
 
     public function chunkSize(): int
+    {
+        return 1000;
+    }
+
+    public function batchSize(): int
     {
         return 1000;
     }
