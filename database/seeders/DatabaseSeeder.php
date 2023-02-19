@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Customer;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Imports\CustomerImport;
+use App\Imports\DuplicataImport;
 use Illuminate\Database\Seeder;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,12 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Customer::factory()->count(20)->create();
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Excel::import(new CustomerImport, 'CLIENTES.xls');
+        Excel::import(new DuplicataImport, 'CLIENTES.xls');
     }
 }
