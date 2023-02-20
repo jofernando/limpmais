@@ -16,29 +16,22 @@ class Imprimir extends Page
 
     protected static string $view = 'filament.pages.imprimir';
 
-    public $customers = [];
+    public $customers = [
+        [
+            'customer_id' => '',
+            'nome' => '',
+            'divida' => '',
+        ],
+    ];
 
-    public function mount(): void
+    public function adicionarCustomer()
     {
-        $this->form->fill();
-    }
-
-    protected function getFormSchema(): array
-    {
-        return [
-            Repeater::make('customers')
-                ->schema([
-                    Select::make('customer_id')
-                        ->required()
-                        ->reactive()
-                        ->label('Código/nome do customer')
-                        ->searchable()
-                        ->getSearchResultsUsing(fn (string $search) => Customer::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(10)->pluck('nome', 'id'))
-                        ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome),
-                ])
-                ->columns(1)
-                ->disableItemMovement(),
+        $this->customers[] = [
+            'customer_id' => '',
+            'nome' => '',
+            'divida' => '',
         ];
+        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->customers)]);
     }
 
     protected function getActions(): array
@@ -48,8 +41,14 @@ class Imprimir extends Page
                 ->action(function (array $data): void {
                     $exploded = explode(',', $data['codigos']);
                     foreach ($exploded as $item) {
-                        $customer = ['customer_id' => $item];
-                        $this->customers[] = $customer;
+                        $customer = Customer::find($item);
+                        if ($customer) {
+                            $this->customers[] = [
+                                'customer_id' => $item,
+                                'nome' => $customer->nome,
+                                'divida' => $customer->divida,
+                            ];
+                        }
                     }
                 })
                 ->form([
@@ -60,6 +59,32 @@ class Imprimir extends Page
                 ])
                 ->modalSubheading('Códigos separados por vírgula. Exemplo: 15487,15487,15487,15487'),
         ];
+    }
+
+    public function removerCustomer($index)
+    {
+        unset($this->customers[$index]);
+    }
+
+    public function setarValores($index)
+    {
+        $customer = Customer::find($this->customers[$index]['customer_id']);
+        if ($customer) {
+            $this->customers[$index]['divida'] = $customer->divida;
+            $this->customers[$index]['nome'] = $customer->identificacao;
+        } else {
+            $this->customers[$index]['customer_id'] = null;
+        }
+        $this->dispatchBrowserEvent('select_text_in_input_with_focus');
+    }
+
+    protected function adicionarCustomers(): void
+    {
+        $exploded = explode(',', $this->texto);
+        foreach ($exploded as $item) {
+            $customer = ['customer_id' => $item];
+            $this->customers[] = $customer;
+        }
     }
 
     public function submit()
