@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Illuminate\Support\Carbon;
 
 class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure, WithBatchInserts
 {
@@ -24,10 +25,15 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
     */
     public function model(array $row)
     {
+        $quitada = $row['datpag'] != '';
+        $timestamp = ($row['datven'] - 25569) * 86400;
+        $vencimento = Carbon::createFromTimestamp($timestamp);
+
         return new Duplicata([
-            'valor' => $row['totdeb'],
-            'vencimento' => now()->addDays(30),
+            'valor' => $row['valdup'],
+            'vencimento' => $vencimento,
             'customer_id' => $row['codcli'],
+            'quitada' => $quitada,
         ]);
     }
 
@@ -39,7 +45,6 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
     public function rules(): array
     {
         return [
-            'totdeb' => ['required', 'numeric', 'min:1']
         ];
     }
 
