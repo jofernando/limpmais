@@ -5,6 +5,7 @@ services:
             context: ./docker/apache
             dockerfile: Dockerfile
         image: php:limpmais
+        restart: always
         volumes:
             - '.:/var/www/html'
             - './docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf'
@@ -19,6 +20,7 @@ services:
           traefik.http.routers.limpmais.rule: Host(`limpmais.jf`)
     postgres:
         image: postgres
+        restart: always
         environment:
             POSTGRES_DB: ${DB_DATABASE}
             POSTGRES_PASSWORD: ${DB_PASSWORD}
