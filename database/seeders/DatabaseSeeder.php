@@ -17,6 +17,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Excel::import(new CustomerImport, 'CLIENTES.xls');
-        Excel::import(new DuplicataImport, 'CLIENTES.xls');
+        Excel::import(new DuplicataImport, 'DUPLRECE.xls');
     }
 }
