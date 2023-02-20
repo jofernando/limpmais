@@ -35,7 +35,7 @@ class Lancar extends Page
             'nome' => '',
             'divida' => '',
             'pago' => '',
-            'comprado' => ','
+            'comprado' => '',
         ],
     ];
 
