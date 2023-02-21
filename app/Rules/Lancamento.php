@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use App\Models\Duplicata;
 use Illuminate\Contracts\Validation\Rule;
 
@@ -48,14 +48,14 @@ class Lancamento implements Rule
                 $this->message = "O valor mínimo para valor pago e valor comprado é 0. Verifique os dados informados: {$texto}.";
                 return false;
             }
-            $customer = Customer::find($item[0]);
-            if ($customer == null) {
+            $cliente = Cliente::find($item[0]);
+            if ($cliente == null) {
                 $this->message = "Não existe cliente para o código informando: {$item[0]}";
                 return false;
             }
-            $divida = $customer->divida;
+            $divida = $cliente->divida;
             if ($item[1] > 0 && $item[1] > $divida) {
-                $nome = $customer->nome;
+                $nome = $cliente->nome;
                 $this->message = "O cliente {$nome} com código {$item[0]} possui dívida de R\${$divida} mas o valor informando foi R\${$item[1]}. Verifique os dados inseridos.";
                 return false;
             }

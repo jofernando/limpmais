@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Customer extends Model
+class Cliente extends Model
 {
     use HasFactory;
 
@@ -29,7 +29,7 @@ class Customer extends Model
     protected $appends = ['divida'];
 
     /**
-     * Get all the duplicatas for the Customer
+     * Get all the duplicatas for the Cliente
      *
      * @return HasMany
      */

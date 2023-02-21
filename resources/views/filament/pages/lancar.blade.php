@@ -2,17 +2,17 @@
     <form wire:submit.prevent="submit">
         <div class="grid grid-cols-1 gap-6 mb-6">
             <span class="text-sm font-medium leading-4 text-gray-700">
-                Customers
+                Clientes
             </span>
             <div class="space-y-6 rounded-xl">
                 <ul>
                     <div class="grid grid-cols-1 gap-6">
-                        @foreach ($customers as $index => $item)
+                        @foreach ($clientes as $index => $item)
                             <li class="bg-white border border-gray-300 shadow-sm rounded-xl relative">
                                 <header class="flex flex-row-reverse items-center h-10 overflow-hidden border-b bg-gray-50 rounded-t-xl">
                                     <ul class="flex divide-x rtl:divide-x-reverse">
                                         <li>
-                                            <button type="button" wire:click="removerCustomer({{$index}})"
+                                            <button type="button" wire:click="removerCliente({{$index}})"
                                                 class="flex items-center justify-center flex-none w-10 h-10 text-danger-600 transition hover:text-danger-500">
                                                 <span class="sr-only">
                                                     Excluir
@@ -40,13 +40,13 @@
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                                                 <span class="text-sm font-medium leading-4 text-gray-700">
-                                                                    Código do customer
+                                                                    Código do cliente
                                                                     <sup class="font-medium text-danger-700">*</sup>
                                                                 </span>
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:change="setarValores({{$index}})" wire:model="customers.{{$index}}.customer_id" id="customer_id_{{$index}}" type="number" autofocus required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:change="setarValores({{$index}})" wire:model="clientes.{{$index}}.cliente_id" id="cliente_id_{{$index}}" type="number" autofocus required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -55,13 +55,13 @@
                                                         <div class="flex items-center justify-between space-x-2 rtl:space-x-reverse">
                                                             <label class="filament-forms-field-wrapper-label inline-flex items-center space-x-3 rtl:space-x-reverse">
                                                                 <span class="text-sm font-medium leading-4 text-gray-700">
-                                                                    Nome do customer
+                                                                    Nome do cliente
                                                                     <sup class="font-medium text-danger-700">*</sup>
                                                                 </span>
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:model="customers.{{$index}}.nome"  type="text" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:model="clientes.{{$index}}.nome"  type="text" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,7 +80,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:model="customers.{{$index}}.divida"  type="number" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:model="clientes.{{$index}}.divida"  type="number" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -95,7 +95,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:model="customers.{{$index}}.pago" type="number" min="0" max="{{$customers[$index]['divida']}}" required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:model="clientes.{{$index}}.pago" type="number" min="0" max="{{$clientes[$index]['divida']}}" required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -110,7 +110,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:model="customers.{{$index}}.comprado" type="number" min="0" required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:model="clientes.{{$index}}.comprado" type="number" min="0" required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,9 +125,9 @@
             </div>
         </div>
         <div class="flex justify-center">
-            <button type="button" wire:click="adicionarCustomer"
+            <button type="button" wire:click="adicionarCliente"
                 class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors focus:outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-primary-600 hover:bg-primary-500 focus:bg-primary-700 focus:ring-offset-primary-700">
-                Adicionar em customers
+                Adicionar em clientes
             </button>
         </div>
         <button type="submit"
@@ -154,7 +154,7 @@
             }
         });
         window.addEventListener('focus_next_input', event => {
-            document.getElementById('customer_id_' + event.detail.index).focus();
+            document.getElementById('cliente_id_' + event.detail.index).focus();
             window.scrollTo(0, document.body.scrollHeight);
         })
         window.addEventListener('select_text_in_input_with_focus', event => {

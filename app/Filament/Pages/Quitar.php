@@ -2,9 +2,9 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use App\Models\Duplicata;
-use App\Rules\CustomersCadastrados;
+use App\Rules\ClientesCadastrados;
 use App\Rules\Lancamento;
 use Carbon\Carbon;
 use Closure;
@@ -23,7 +23,7 @@ class Quitar extends Page
 
     protected static string $view = 'filament.pages.quitar';
 
-    public $customers = [];
+    public $clientes = [];
 
     public function mount(): void
     {
@@ -33,17 +33,17 @@ class Quitar extends Page
     protected function getFormSchema(): array
     {
         return [
-            Repeater::make('customers')
+            Repeater::make('clientes')
                 ->schema([
-                    Select::make('customer_id')
+                    Select::make('cliente_id')
                         ->required()
                         ->reactive()
-                        ->label('Código/nome do customer')
+                        ->label('Código/nome do cliente')
                         ->searchable()
-                        ->getSearchResultsUsing(fn (string $search) => Customer::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(10)->pluck('nome', 'id'))
-                        ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome)
+                        ->getSearchResultsUsing(fn (string $search) => Cliente::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(10)->pluck('nome', 'id'))
+                        ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome)
                         ->afterStateUpdated(function (Closure $set, $state) {
-                            $set('divida', Customer::find($state)?->divida);
+                            $set('divida', Cliente::find($state)?->divida);
                         }),
                     TextInput::make('divida')->numeric()->disabled()->label('Dívida'),
                 ])
@@ -54,7 +54,7 @@ class Quitar extends Page
 
     public function submit()
     {
-        Duplicata::whereIn('customer_id', array_column($this->duplicatas, 'customer_id'))->where('quitada', false)->update(['quitada' => true]);
+        Duplicata::whereIn('cliente_id', array_column($this->duplicatas, 'cliente_id'))->where('quitada', false)->update(['quitada' => true]);
         $this->notify('success', 'Duplicatas quitadas com sucesso.');
         return $this->redirectRoute('filament.pages.quitar');
     }

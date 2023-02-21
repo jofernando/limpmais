@@ -2,13 +2,13 @@
 
 namespace App\Imports;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 
-class CustomerImport implements ToModel, WithChunkReading, WithHeadingRow, WithBatchInserts
+class ClienteImport implements ToModel, WithChunkReading, WithHeadingRow, WithBatchInserts
 {
     /**
     * @param array $row
@@ -17,7 +17,7 @@ class CustomerImport implements ToModel, WithChunkReading, WithHeadingRow, WithB
     */
     public function model(array $row)
     {
-        return new Customer([
+        return new Cliente([
             'nome' => $row['nomcli'],
             'rua' => $row['rua'],
             'cidade' => $row['cidade'],

@@ -14,7 +14,7 @@ class Duplicata extends Model
         'valor',
         'vencimento',
         'observacao',
-        'customer_id',
+        'cliente_id',
         'quitada',
     ];
 
@@ -23,13 +23,13 @@ class Duplicata extends Model
     ];
 
     /**
-     * Get the customer that owns the Duplicata
+     * Get the cliente that owns the Duplicata
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function customer(): BelongsTo
+    public function cliente(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Cliente::class);
     }
 
     public function getStatusAttribute(): string

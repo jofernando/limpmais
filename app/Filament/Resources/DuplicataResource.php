@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DuplicataResource\Pages;
 use App\Filament\Resources\DuplicataResource\RelationManagers;
-use App\Models\Customer;
+use App\Models\Cliente;
 use App\Models\Duplicata;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -32,12 +32,12 @@ class DuplicataResource extends Resource
             ->schema([
                 Grid::make()
                     ->schema([
-                        Select::make('customer_id')
+                        Select::make('cliente_id')
                             ->required()
-                            ->label('Código do customer')
+                            ->label('Código do cliente')
                             ->searchable()
-                            ->getSearchResultsUsing(fn (string $search) => Customer::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(50)->pluck('nome', 'id'))
-                            ->getOptionLabelUsing(fn ($value): ?string => Customer::find($value)?->nome),
+                            ->getSearchResultsUsing(fn (string $search) => Cliente::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(50)->pluck('nome', 'id'))
+                            ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome),
                     ])->columns(1),
                 TextInput::make('valor')
                     ->required()
@@ -58,7 +58,7 @@ class DuplicataResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('Código'),
-                Tables\Columns\TextColumn::make('customer.identificacao'),
+                Tables\Columns\TextColumn::make('cliente.identificacao'),
                 Tables\Columns\TextColumn::make('valor'),
                 BadgeColumn::make('status')
                     ->colors([

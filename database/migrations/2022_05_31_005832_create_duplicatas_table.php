@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('observacao')->nullable();
             $table->date('vencimento');
             $table->boolean('quitada')->default(false);
-            $table->foreignId('customer_id')->constrained();
+            $table->foreignId('cliente_id')->constrained();
             $table->timestamps();
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\CustomerResource\RelationManagers;
+namespace App\Filament\Resources\ClienteResource\RelationManagers;
 
 use Carbon\Carbon;
 use Filament\Forms;

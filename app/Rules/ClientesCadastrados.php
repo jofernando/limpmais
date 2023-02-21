@@ -2,10 +2,10 @@
 
 namespace App\Rules;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use Illuminate\Contracts\Validation\Rule;
 
-class CustomersCadastrados implements Rule
+class ClientesCadastrados implements Rule
 {
     /**
      * Create a new rule instance.
@@ -27,7 +27,7 @@ class CustomersCadastrados implements Rule
     public function passes($attribute, $value)
     {
         $exploded = explode(',', $value);
-        return Customer::whereIn('id', $exploded)->count() == count($exploded);
+        return Cliente::whereIn('id', $exploded)->count() == count($exploded);
     }
 
     /**

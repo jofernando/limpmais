@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\CustomerResource\Pages;
+namespace App\Filament\Resources\ClienteResource\Pages;
 
-use App\Filament\Resources\CustomerResource;
+use App\Filament\Resources\ClienteResource;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateCustomer extends CreateRecord
+class CreateCliente extends CreateRecord
 {
-    protected static string $resource = CustomerResource::class;
+    protected static string $resource = ClienteResource::class;
 
     protected function getCreatedNotificationMessage(): ?string
     {

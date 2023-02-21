@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -16,37 +16,37 @@ class Imprimir extends Page
 
     protected static string $view = 'filament.pages.imprimir';
 
-    public $customers = [
+    public $clientes = [
         [
-            'customer_id' => '',
+            'cliente_id' => '',
             'nome' => '',
             'divida' => '',
         ],
     ];
 
-    public function adicionarCustomer()
+    public function adicionarCliente()
     {
-        $this->customers[] = [
-            'customer_id' => '',
+        $this->clientes[] = [
+            'cliente_id' => '',
             'nome' => '',
             'divida' => '',
         ];
-        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->customers)]);
+        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->clientes)]);
     }
 
     protected function getActions(): array
     {
         return [
-            Action::make('adicionarMuitosCustomers')
+            Action::make('adicionarMuitosClientes')
                 ->action(function (array $data): void {
                     $exploded = explode(',', $data['codigos']);
                     foreach ($exploded as $item) {
-                        $customer = Customer::find($item);
-                        if ($customer) {
-                            $this->customers[] = [
-                                'customer_id' => $item,
-                                'nome' => $customer->nome,
-                                'divida' => $customer->divida,
+                        $cliente = Cliente::find($item);
+                        if ($cliente) {
+                            $this->clientes[] = [
+                                'cliente_id' => $item,
+                                'nome' => $cliente->nome,
+                                'divida' => $cliente->divida,
                             ];
                         }
                     }
@@ -61,26 +61,26 @@ class Imprimir extends Page
         ];
     }
 
-    public function removerCustomer($index)
+    public function removerCliente($index)
     {
-        unset($this->customers[$index]);
+        unset($this->clientes[$index]);
     }
 
     public function setarValores($index)
     {
-        $customer = Customer::find($this->customers[$index]['customer_id']);
-        if ($customer) {
-            $this->customers[$index]['divida'] = $customer->divida;
-            $this->customers[$index]['nome'] = $customer->nome;
+        $cliente = Cliente::find($this->clientes[$index]['cliente_id']);
+        if ($cliente) {
+            $this->clientes[$index]['divida'] = $cliente->divida;
+            $this->clientes[$index]['nome'] = $cliente->nome;
         } else {
-            $this->customers[$index]['customer_id'] = null;
+            $this->clientes[$index]['cliente_id'] = null;
         }
         $this->dispatchBrowserEvent('select_text_in_input_with_focus');
     }
 
     public function submit()
     {
-        $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->customers);
+        $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->clientes);
         $data = now()->format('d/m/Y');
         $hora = now()->format('H:i:s');
         $pdf = PDF::loadView('impressao.duplicatas', compact('duplicatas', 'data', 'hora'))->output();
@@ -89,11 +89,11 @@ class Imprimir extends Page
 
     private function mapHelper($item)
     {
-        $customer = Customer::find($item['customer_id']);
-        $item['codigo'] = $customer->id;
-        $item['divida'] = $customer->divida;
-        $item['nome'] = $customer->nome;
-        $item['data_vencimento'] = $customer->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
+        $cliente = Cliente::find($item['cliente_id']);
+        $item['codigo'] = $cliente->id;
+        $item['divida'] = $cliente->divida;
+        $item['nome'] = $cliente->nome;
+        $item['data_vencimento'] = $cliente->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
         return $item;
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CustomerResource\Pages;
-use App\Filament\Resources\CustomerResource\RelationManagers\DuplicatasRelationManager;
-use App\Models\Customer;
+use App\Filament\Resources\ClienteResource\Pages;
+use App\Filament\Resources\ClienteResource\RelationManagers\DuplicatasRelationManager;
+use App\Models\Cliente;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Resources\Form;
@@ -13,9 +13,9 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomerResource extends Resource
+class ClienteResource extends Resource
 {
-    protected static ?string $model = Customer::class;
+    protected static ?string $model = Cliente::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -56,7 +56,7 @@ class CustomerResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('divida')
                     ->label('Dívida')
-                    ->visibleOn(Pages\ViewCustomer::class),
+                    ->visibleOn(Pages\ViewCliente::class),
             ]);
     }
 
@@ -85,10 +85,10 @@ class CustomerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCustomers::route('/'),
-            'create' => Pages\CreateCustomer::route('/create'),
-            'view' => Pages\ViewCustomer::route('/{record}'),
-            'edit' => Pages\EditCustomer::route('/{record}/edit'),
+            'index' => Pages\ListClientes::route('/'),
+            'create' => Pages\CreateCliente::route('/create'),
+            'view' => Pages\ViewCliente::route('/{record}'),
+            'edit' => Pages\EditCliente::route('/{record}/edit'),
         ];
     }
 }

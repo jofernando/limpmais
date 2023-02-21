@@ -32,7 +32,7 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
         return new Duplicata([
             'valor' => $row['valdup'],
             'vencimento' => $vencimento,
-            'customer_id' => $row['codcli'],
+            'cliente_id' => $row['codcli'],
             'quitada' => $quitada,
         ]);
     }

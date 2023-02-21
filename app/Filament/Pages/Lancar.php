@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use App\Models\Duplicata;
 use App\Rules\Lancamento;
 use Carbon\Carbon;
@@ -29,9 +29,9 @@ class Lancar extends Page
 
     public $texto;
 
-    public $customers = [
+    public $clientes = [
         [
-            'customer_id' => '',
+            'cliente_id' => '',
             'nome' => '',
             'divida' => '',
             'pago' => '',
@@ -42,17 +42,17 @@ class Lancar extends Page
     protected function getActions(): array
     {
         return [
-            Action::make('adicionarMuitosCustomers')
+            Action::make('adicionarMuitosClientes')
                 ->action(function (array $data): void {
                     $exploded = explode(',', $data['valores']);
                     $chunked = array_chunk($exploded, 3);
                     foreach ($chunked as $item) {
-                        $customer = Customer::find($item[0]);
-                        if ($customer) {
-                            $this->customers[] = [
-                                'customer_id' => $item[0],
-                                'nome' => $customer->nome,
-                                'divida' => $customer->divida,
+                        $cliente = Cliente::find($item[0]);
+                        if ($cliente) {
+                            $this->clientes[] = [
+                                'cliente_id' => $item[0],
+                                'nome' => $cliente->nome,
+                                'divida' => $cliente->divida,
                                 'pago' => $item[1],
                                 'comprado' => $item[2],
                             ];
@@ -70,41 +70,41 @@ class Lancar extends Page
         ];
     }
 
-    public function adicionarCustomer()
+    public function adicionarCliente()
     {
-        $this->customers[] = [
-            'customer_id' => '',
+        $this->clientes[] = [
+            'cliente_id' => '',
             'nome' => '',
             'divida' => '',
             'pago' => '',
             'comprado' => ','
         ];
-        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->customers)]);
+        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->clientes)]);
     }
 
-    public function removerCustomer($index)
+    public function removerCliente($index)
     {
-        unset($this->customers[$index]);
+        unset($this->clientes[$index]);
     }
 
     public function setarValores($index)
     {
-        $customer = Customer::find($this->customers[$index]['customer_id']);
-        if ($customer) {
-            $this->customers[$index]['divida'] = $customer->divida;
-            $this->customers[$index]['nome'] = $customer->identificacao;
-            $this->customers[$index]['pago'] = $customer->divida;
+        $cliente = Cliente::find($this->clientes[$index]['cliente_id']);
+        if ($cliente) {
+            $this->clientes[$index]['divida'] = $cliente->divida;
+            $this->clientes[$index]['nome'] = $cliente->identificacao;
+            $this->clientes[$index]['pago'] = $cliente->divida;
         } else {
-            $this->customers[$index]['customer_id'] = null;
+            $this->clientes[$index]['cliente_id'] = null;
         }
         $this->dispatchBrowserEvent('select_text_in_input_with_focus');
     }
 
     public function submit()
     {
-        foreach ($this->customers as $item) {
-            $customer = Customer::find($item['customer_id']);
-            $duplicatas = $customer->duplicatas()->where('quitada', false)->get();
+        foreach ($this->clientes as $item) {
+            $cliente = Cliente::find($item['cliente_id']);
+            $duplicatas = $cliente->duplicatas()->where('quitada', false)->get();
             $valorPago = floatval($item['pago']);
             $valorComprado = floatval($item['comprado']);
             foreach ($duplicatas as $dupl) {
@@ -115,14 +115,14 @@ class Lancar extends Page
                 } elseif ($valorPago > 0) {
                     $dupl->quitada = true;
                     $restante = $dupl->valor - $valorPago;
-                    $novaDuplicata = Duplicata::create(['valor' => $restante, 'vencimento' => $dupl->vencimento, 'customer_id' => $customer->id]);
+                    $novaDuplicata = Duplicata::create(['valor' => $restante, 'vencimento' => $dupl->vencimento, 'cliente_id' => $cliente->id]);
                     $dupl->observacao = "Duplicata paga parcialmente. Valor pago: {$valorPago}. Restante {$restante}. Nova duplicata gerada {$novaDuplicata->id}";
                     $valorPago = 0;
                     $dupl->save();
                 }
             }
             if($valorComprado > 0) {
-                Duplicata::create(['valor' => $valorComprado, 'vencimento' => Carbon::now()->addDays(30), 'customer_id' => $customer->id]);
+                Duplicata::create(['valor' => $valorComprado, 'vencimento' => Carbon::now()->addDays(30), 'cliente_id' => $cliente->id]);
             }
             $this->notify('success', 'Duplicatas lançadas com sucesso.');
         }
@@ -131,7 +131,7 @@ class Lancar extends Page
     public function submitAndPrint()
     {
         $this->submit();
-        $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->customers);
+        $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->clientes);
         $duplicatas = array_filter($duplicatas, fn($item) => $item['divida'] > 0);
         $data = now()->format('d/m/Y');
         $hora = now()->format('H:i:s');
@@ -141,11 +141,11 @@ class Lancar extends Page
 
     private function mapHelper($item)
     {
-        $customer = Customer::find($item['customer_id']);
-        $item['codigo'] = $customer->id;
-        $item['nome'] = $customer->identificacao;
-        $item['divida'] = $customer->divida;
-        $item['data_vencimento'] = $customer->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
+        $cliente = Cliente::find($item['cliente_id']);
+        $item['codigo'] = $cliente->id;
+        $item['nome'] = $cliente->identificacao;
+        $item['divida'] = $cliente->divida;
+        $item['data_vencimento'] = $cliente->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
         return $item;
     }
 }

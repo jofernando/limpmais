@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\CustomerImport;
+use App\Imports\ClienteImport;
 use App\Imports\DuplicataImport;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ImportarCustomers implements ShouldQueue
+class ImportarClientes implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -33,7 +33,7 @@ class ImportarCustomers implements ShouldQueue
      */
     public function handle()
     {
-        // Excel::import(new CustomerImport, storage_path("app/CLIENTES.xls"));
+        // Excel::import(new ClienteImport, storage_path("app/CLIENTES.xls"));
         Excel::import(new DuplicataImport, storage_path("app/CLIENTES.xls"));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\Customer;
+use App\Models\Cliente;
 use Illuminate\Contracts\Validation\Rule;
 
 class Impressao implements Rule
