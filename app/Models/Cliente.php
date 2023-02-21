@@ -35,7 +35,7 @@ class Cliente extends Model
      */
     public function duplicatas(): HasMany
     {
-        return $this->hasMany(Duplicata::class)->orderBy('quitada', 'ASC');
+        return $this->hasMany(Duplicata::class);
     }
 
     public function getIdentificacaoAttribute(): string
@@ -62,6 +62,6 @@ class Cliente extends Model
 
     public function getDividaAttribute()
     {
-        return $this->duplicatas()->where('quitada', false)->sum('valor');
+        return $this->duplicatas()->whereNull('pagamento')->sum('valor');
     }
 }

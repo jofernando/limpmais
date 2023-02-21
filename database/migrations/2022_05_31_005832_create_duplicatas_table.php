@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('duplicatas', function (Blueprint $table) {
             $table->id();
             $table->decimal('valor', 15, 2);
+            $table->decimal('pago', 15, 2)->nullable();
             $table->text('observacao')->nullable();
             $table->date('vencimento');
-            $table->boolean('quitada')->default(false);
+            $table->date('pagamento')->nullable();
             $table->foreignId('cliente_id')->constrained();
             $table->timestamps();
         });

@@ -25,15 +25,22 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
     */
     public function model(array $row)
     {
-        $quitada = $row['datpag'] != '';
         $timestamp = ($row['datven'] - 25569) * 86400;
         $vencimento = Carbon::createFromTimestamp($timestamp);
-
+        $pagamento = null;
+        if ($row['datpag']) {
+            $timestamp = ($row['datpag'] - 25569) * 86400;
+            $pagamento = Carbon::createFromTimestamp($timestamp);
+        }
+        $pago = null;
+        if ($row['valpag'])
+            $pago = $row['valpag'];
         return new Duplicata([
-            'valor' => $row['valdup'],
-            'vencimento' => $vencimento,
             'cliente_id' => $row['codcli'],
-            'quitada' => $quitada,
+            'valor' => $row['valdup'],
+            'pago' => $pago,
+            'vencimento' => $vencimento,
+            'pagamento' => $pagamento,
         ]);
     }
 

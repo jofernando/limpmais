@@ -93,7 +93,7 @@ class Imprimir extends Page
         $item['codigo'] = $cliente->id;
         $item['divida'] = $cliente->divida;
         $item['nome'] = $cliente->nome;
-        $item['data_vencimento'] = $cliente->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
+        $item['data_vencimento'] = $cliente->duplicatas()->whereNull('pagamento')->first()?->vencimento->format('d/m/Y');
         return $item;
     }
 }

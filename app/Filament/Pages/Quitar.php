@@ -4,19 +4,13 @@ namespace App\Filament\Pages;
 
 use App\Models\Cliente;
 use App\Models\Duplicata;
-use App\Rules\ClientesCadastrados;
-use App\Rules\Lancamento;
 use Carbon\Carbon;
 use Closure;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Wizard;
-use Filament\Pages\Actions\Action;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 class Quitar extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
@@ -54,7 +48,9 @@ class Quitar extends Page
 
     public function submit()
     {
-        Duplicata::whereIn('cliente_id', array_column($this->duplicatas, 'cliente_id'))->where('quitada', false)->update(['quitada' => true]);
+        Duplicata::whereIn('cliente_id', array_column($this->clientes, 'cliente_id'))
+            ->whereNull('pagamento')
+            ->update(['pago' => DB::raw('"valor"'), 'pagamento' => Carbon::now()]);
         $this->notify('success', 'Duplicatas quitadas com sucesso.');
         return $this->redirectRoute('filament.pages.quitar');
     }

@@ -12,14 +12,16 @@ class Duplicata extends Model
 
     protected $fillable = [
         'valor',
+        'pago',
         'vencimento',
+        'pagamento',
         'observacao',
         'cliente_id',
-        'quitada',
     ];
 
     protected $casts = [
         'vencimento' => 'datetime',
+        'pagamento' => 'datetime',
     ];
 
     /**
@@ -34,7 +36,7 @@ class Duplicata extends Model
 
     public function getStatusAttribute(): string
     {
-        if($this->quitada) return 'pago';
+        if($this->pagamento) return 'pago';
         if($this->vencimento < now()) return 'vencido';
         else return 'pendente';
     }

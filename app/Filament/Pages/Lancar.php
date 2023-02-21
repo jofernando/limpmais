@@ -104,16 +104,18 @@ class Lancar extends Page
     {
         foreach ($this->clientes as $item) {
             $cliente = Cliente::find($item['cliente_id']);
-            $duplicatas = $cliente->duplicatas()->where('quitada', false)->get();
+            $duplicatas = $cliente->duplicatas()->whereNull('pagamento')->get();
             $valorPago = floatval($item['pago']);
             $valorComprado = floatval($item['comprado']);
             foreach ($duplicatas as $dupl) {
                 if ($valorPago >= $dupl->valor) {
-                    $dupl->quitada = true;
+                    $dupl->pagamento = Carbon::now();
+                    $dupl->pago = $dupl->valor;
                     $valorPago -= $dupl->valor;
                     $dupl->save();
                 } elseif ($valorPago > 0) {
-                    $dupl->quitada = true;
+                    $dupl->pagamento = Carbon::now();
+                    $dupl->pago = $valorPago;
                     $restante = $dupl->valor - $valorPago;
                     $novaDuplicata = Duplicata::create(['valor' => $restante, 'vencimento' => $dupl->vencimento, 'cliente_id' => $cliente->id]);
                     $dupl->observacao = "Duplicata paga parcialmente. Valor pago: {$valorPago}. Restante {$restante}. Nova duplicata gerada {$novaDuplicata->id}";
@@ -145,7 +147,7 @@ class Lancar extends Page
         $item['codigo'] = $cliente->id;
         $item['nome'] = $cliente->identificacao;
         $item['divida'] = $cliente->divida;
-        $item['data_vencimento'] = $cliente->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
+        $item['data_vencimento'] = $cliente->duplicatas()->whereNull('pagamento')->first()?->vencimento->format('d/m/Y');
         return $item;
     }
 }
