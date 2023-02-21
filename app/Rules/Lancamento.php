@@ -32,14 +32,14 @@ class Lancamento implements Rule
         $exploded = explode(',', $value);
         $chunked = array_chunk($exploded, 3);
         if (count(end($chunked)) != 3) {
-            $this->message = "Formato inválido. Verifique se está faltando algum valor entre as vírgulas ou se tem vírgula no fim ou começo. O formato correto é: número do cliente, valor recebido, valor a receber.";
+            $this->message = "Formato inválido. Verifique se está faltando algum valor entre as vírgulas ou se tem vírgula no fim ou começo. O formato correto é: código do cliente, valor pago, valor comprado.";
             return false;
         }
         foreach ($chunked as $item) {
             if(!is_numeric($item[0]) || !is_numeric($item[1]) || !is_numeric($item[2]))
             {
                 $texto = implode(", ", $item);
-                $this->message = "Esse texto contém caracters que não são permitidos. {$texto}. Somente números, vírgulas e o sinal de menos são permitidos.";
+                $this->message = "Esse texto contém caracters que não são permitidos. {$texto}. Somente números e vírgulas são permitidos.";
                 return false;
             }
             $customer = Customer::find($item[0]);
