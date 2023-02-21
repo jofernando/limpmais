@@ -42,6 +42,12 @@ class Lancamento implements Rule
                 $this->message = "Esse texto contém caracters que não são permitidos. {$texto}. Somente números e vírgulas são permitidos.";
                 return false;
             }
+            if(($item[1] <= 0) || ($item[2] <= 0))
+            {
+                $texto = implode(", ", $item);
+                $this->message = "O valor mínimo para valor pago e valor comprado é 0. Verifique os dados informados: {$texto}.";
+                return false;
+            }
             $customer = Customer::find($item[0]);
             if ($customer == null) {
                 $this->message = "Não existe cliente para o código informando: {$item[0]}";
