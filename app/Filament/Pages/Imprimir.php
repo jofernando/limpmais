@@ -78,15 +78,6 @@ class Imprimir extends Page
         $this->dispatchBrowserEvent('select_text_in_input_with_focus');
     }
 
-    protected function adicionarCustomers(): void
-    {
-        $exploded = explode(',', $this->texto);
-        foreach ($exploded as $item) {
-            $customer = ['customer_id' => $item];
-            $this->customers[] = $customer;
-        }
-    }
-
     public function submit()
     {
         $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->customers);
