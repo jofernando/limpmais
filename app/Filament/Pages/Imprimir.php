@@ -71,7 +71,7 @@ class Imprimir extends Page
         $customer = Customer::find($this->customers[$index]['customer_id']);
         if ($customer) {
             $this->customers[$index]['divida'] = $customer->divida;
-            $this->customers[$index]['nome'] = $customer->identificacao;
+            $this->customers[$index]['nome'] = $customer->nome;
         } else {
             $this->customers[$index]['customer_id'] = null;
         }
@@ -92,7 +92,7 @@ class Imprimir extends Page
         $customer = Customer::find($item['customer_id']);
         $item['codigo'] = $customer->id;
         $item['divida'] = $customer->divida;
-        $item['nome'] = $customer->identificacao;
+        $item['nome'] = $customer->nome;
         $item['data_vencimento'] = $customer->duplicatas()->where('quitada', false)->first()?->vencimento->format('d/m/Y');
         return $item;
     }
