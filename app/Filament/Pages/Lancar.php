@@ -39,6 +39,37 @@ class Lancar extends Page
         ],
     ];
 
+    protected function getActions(): array
+    {
+        return [
+            Action::make('adicionarMuitosCustomers')
+                ->action(function (array $data): void {
+                    $exploded = explode(',', $data['valores']);
+                    $chunked = array_chunk($exploded, 3);
+                    foreach ($chunked as $item) {
+                        $customer = Customer::find($item[0]);
+                        if ($customer) {
+                            $this->customers[] = [
+                                'customer_id' => $item[0],
+                                'nome' => $customer->nome,
+                                'divida' => $customer->divida,
+                                'pago' => $item[1],
+                                'comprado' => $item[2],
+                            ];
+                        }
+                    }
+                })
+                ->form([
+                    Textarea::make('valores')
+                        ->label('Valores')
+                        ->rows(10)
+                        ->rule(new Lancamento())
+                        ->required(),
+                ])
+                ->modalSubheading('Valores no seguinte formato: código do cliente, valor pago, valor comprado (sem espaços)'),
+        ];
+    }
+
     public function adicionarCustomer()
     {
         $this->customers[] = [
