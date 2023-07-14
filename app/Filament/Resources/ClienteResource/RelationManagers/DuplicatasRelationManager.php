@@ -9,13 +9,14 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\HasManyRelationManager;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Model;
 
-class DuplicatasRelationManager extends HasManyRelationManager
+class DuplicatasRelationManager extends RelationManager
 {
     protected static string $relationship = 'duplicatas';
 
@@ -31,6 +32,14 @@ class DuplicatasRelationManager extends HasManyRelationManager
                 DatePicker::make('vencimento')
                     ->required()
                     ->default(Carbon::now()->addDays(30)),
+                TextInput::make('pago')
+                    ->numeric()
+                    ->label('Valor recebido')
+                    ->requiredWith('pagamento')
+                    ->hiddenOn('create'),
+                DatePicker::make('pagamento')
+                    ->requiredWith('pago')
+                    ->hiddenOn('create'),
                 Grid::make()
                     ->schema([
                         MarkdownEditor::make('observacao')
@@ -55,6 +64,15 @@ class DuplicatasRelationManager extends HasManyRelationManager
             ])
             ->filters([
                 //
+            ])->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 }

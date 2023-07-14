@@ -32,7 +32,7 @@ class Quitar extends Page
                     Select::make('cliente_id')
                         ->required()
                         ->reactive()
-                        ->label('Código/nome do cliente')
+                        ->label('Código/Nome do cliente')
                         ->searchable()
                         ->getSearchResultsUsing(fn (string $search) => Cliente::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(10)->pluck('nome', 'id'))
                         ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome)

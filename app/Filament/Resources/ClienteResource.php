@@ -35,6 +35,11 @@ class ClienteResource extends Resource
             ->schema([
                 Grid::make()
                     ->schema([
+                        Forms\Components\TextInput::make('id')
+                            ->label('Código')
+                            ->required()
+                            ->maxLength(255)
+                            ->visibleOn(Pages\ViewCliente::class),
                         Forms\Components\TextInput::make('nome')
                             ->required()
                             ->maxLength(255),

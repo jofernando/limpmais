@@ -160,8 +160,5 @@
         window.addEventListener('select_text_in_input_with_focus', event => {
             document.activeElement.select();
         })
-        window.onbeforeunload = function(e) {
-            return "Do you want to exit this page?";
-        };
     </script>
 </x-filament::page>

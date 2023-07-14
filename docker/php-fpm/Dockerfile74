@@ -1,0 +1,45 @@
+FROM php:7.4-fpm-alpine
+
+# Set working directory
+WORKDIR /var/www/html/
+
+ARG WWWGROUP=1000
+ARG WWWUSER=1000
+
+# Install dependencies
+RUN apk update && apk add --no-cache \
+    libpq-dev \
+    tzdata \
+    zip libzip-dev \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    jpegoptim optipng pngquant gifsicle
+
+ENV LC_ALL pt_BR.UTF-8
+ENV LANG pt_BR.UTF-8
+ENV LANGUAGE pt_BR.UTF-8
+
+# Install extensions
+RUN docker-php-ext-install zip bcmath pdo_pgsql \
+ && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
+ && docker-php-ext-install gd
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
+
+# Add user for laravel application
+RUN addgroup -g $WWWGROUP www
+RUN adduser -u $WWWUSER -s /bin/sh -G www -D www
+
+# Copy existing application directory permissions
+COPY --chown=www:www . /var/www/html
+
+# Change current user to www
+USER www
+
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]

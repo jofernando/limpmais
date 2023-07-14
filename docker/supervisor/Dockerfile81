@@ -1,0 +1,11 @@
+FROM jofernando/php:8.1-fpm-alpine
+
+USER root
+
+RUN apk update && apk add --no-cache \
+    supervisor
+
+COPY ./supervisord.conf /etc/supervisor/supervisord.conf
+RUN mkdir -p "/var/log/supervisor/"
+
+CMD ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisor/supervisord.conf"]

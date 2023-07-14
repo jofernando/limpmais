@@ -1,34 +1,54 @@
-version: '3.8'
+volumes:
+  postgres:
 services:
-    php:
-        build:
-            context: ./docker/apache
-            dockerfile: Dockerfile
-        image: php:limpmais
-        restart: always
-        volumes:
-            - '.:/var/www/html'
-            - './docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf'
-            - './php.ini-development:/usr/local/etc/php/php.ini'
-        networks:
-            - limpmais
-            - traefik
-        depends_on:
-            - postgres
-        labels:
-          traefik.enable: true
-          traefik.http.routers.limpmais.rule: Host(`limpmais.jf`)
-    postgres:
-        image: postgres
-        restart: always
-        environment:
-            POSTGRES_DB: ${DB_DATABASE}
-            POSTGRES_PASSWORD: ${DB_PASSWORD}
-            POSTGRES_USER: ${DB_USERNAME}
-        networks:
-            - limpmais
-networks:
-    limpmais:
-        name: limpmais
-    traefik:
-        external: true
+  php-fpm:
+    build:
+      context: ./docker/php-fpm/
+      dockerfile: Dockerfile81-fpm
+      args:
+        WWWGROUP: '${WWWGROUP}'
+        WWWUSER: '${WWWUSER}'
+    image: jofernando/php:8.1-fpm
+    volumes:
+      - ./:/var/www/html/
+  supervisor:
+    build:
+      context: ./docker/supervisor/
+      dockerfile: Dockerfile81
+      args:
+        WWWGROUP: '${WWWGROUP}'
+        WWWUSER: '${WWWUSER}'
+    image: jofernando/php:8.1-supervisor
+    volumes:
+      - ./:/var/www/html/
+  nginx:
+    image: jofernando/nginx
+    build: ./docker/nginx/
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - 80:80
+  postgres:
+    image: 'postgres'
+    environment:
+      POSTGRES_DB: '${DB_DATABASE:-laravel}'
+      POSTGRES_USER: '${DB_USERNAME:-postgres}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', '${DB_DATABASE}', '-U', '${DB_USERNAME}']
+      retries: 3
+      timeout: 5s
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+
+

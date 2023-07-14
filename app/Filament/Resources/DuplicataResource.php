@@ -45,6 +45,14 @@ class DuplicataResource extends Resource
                 DatePicker::make('vencimento')
                     ->required()
                     ->default(now()->addDays(30)),
+                TextInput::make('pago')
+                    ->numeric()
+                    ->label('Valor recebido')
+                    ->requiredWith('pagamento')
+                    ->hiddenOn('create'),
+                DatePicker::make('pagamento')
+                    ->requiredWith('pago')
+                    ->hiddenOn('create'),
                 Grid::make()
                     ->schema([
                         MarkdownEditor::make('observacao')
