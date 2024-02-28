@@ -17,6 +17,8 @@ class Duplicata extends Model
         'pagamento',
         'observacao',
         'cliente_id',
+        'compra',
+        'gastos'
     ];
 
     protected $casts = [

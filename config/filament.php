@@ -143,7 +143,6 @@ return [
         'register' => [
             Widgets\AccountWidget::class,
             StatsOverview::class,
-            ChartOverview::class,
         ],
     ],
 

@@ -19,6 +19,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class DuplicataResource extends Resource
 {
@@ -39,20 +40,32 @@ class DuplicataResource extends Resource
                             ->getSearchResultsUsing(fn (string $search) => Cliente::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(50)->pluck('nome', 'id'))
                             ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome),
                     ])->columns(1),
-                TextInput::make('valor')
-                    ->required()
-                    ->numeric(),
+                PtbrMoney::make('valor')
+                    ->required(),
                 DatePicker::make('vencimento')
                     ->required()
                     ->default(now()->addDays(30)),
-                TextInput::make('pago')
-                    ->numeric()
+                PtbrMoney::make('pago')
                     ->label('Valor recebido')
                     ->requiredWith('pagamento')
                     ->hiddenOn('create'),
                 DatePicker::make('pagamento')
                     ->requiredWith('pago')
                     ->hiddenOn('create'),
+                Grid::make()
+                    ->schema([
+                        PtbrMoney::make('compra')->reactive(),
+                        PtbrMoney::make('gastos')->reactive(),
+                        Forms\Components\Placeholder::make('final')
+                            ->content(function($get) {
+                                $gastos = str_replace('.', '', $get('gastos'));
+                                $compra = str_replace('.', '', $get('compra'));
+                                $gastos = str_replace(',', '.', $gastos);
+                                $compra = str_replace(',', '.', $compra);
+                                return number_format(floatval($compra) + floatval($gastos), '2', ',', '.');
+                            })
+                            ->reactive(),
+                    ])->columns(3),
                 Grid::make()
                     ->schema([
                         MarkdownEditor::make('observacao')
@@ -67,7 +80,7 @@ class DuplicataResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('Código'),
                 Tables\Columns\TextColumn::make('cliente.identificacao'),
-                Tables\Columns\TextColumn::make('valor'),
+                Tables\Columns\TextColumn::make('valor')->money('BRL'),
                 BadgeColumn::make('status')
                     ->colors([
                         'success' => fn ($state): bool => $state === 'pago',

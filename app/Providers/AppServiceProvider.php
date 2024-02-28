@@ -24,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Filament::registerScripts([
+            'https://unpkg.com/@alpinejs/mask@3.x.x/dist/cdn.min.js',
+        ], true);
         Filament::serving(function () {
             Filament::registerNavigationGroups([
                 'Cliente',

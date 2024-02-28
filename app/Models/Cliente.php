@@ -19,6 +19,7 @@ class Cliente extends Model
         'ponto_referencia',
         'observacao',
         'setor',
+        'cpf_cnpj'
     ];
 
     /**

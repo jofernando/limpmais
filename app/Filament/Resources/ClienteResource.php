@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClienteResource\Pages;
 use App\Filament\Resources\ClienteResource\RelationManagers\DuplicatasRelationManager;
+use App\Forms\Components\CpfCnpj;
 use App\Models\Cliente;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -12,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Model;
+use Leandrocfe\FilamentPtbrFormFields\PtbrCpfCnpj;
 
 class ClienteResource extends Resource
 {
@@ -44,6 +46,9 @@ class ClienteResource extends Resource
                             ->required()
                             ->maxLength(255),
                     ])->columns(1),
+                PtbrCpfCnpj::make('cpf_cnpj')
+                    ->label('CPF/CNPJ')
+                    ->rule('cpf_ou_cnpj'),
                 Forms\Components\TextInput::make('rua')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('numero')
@@ -72,7 +77,7 @@ class ClienteResource extends Resource
                 Tables\Columns\TextColumn::make('id')->label('Código'),
                 Tables\Columns\TextColumn::make('nome'),
                 Tables\Columns\TextColumn::make('endereco')->label('Endereço'),
-                Tables\Columns\TextColumn::make('divida')
+                Tables\Columns\TextColumn::make('divida')->money('BRL')
                     ->label('Dívida'),
             ])
             ->filters([

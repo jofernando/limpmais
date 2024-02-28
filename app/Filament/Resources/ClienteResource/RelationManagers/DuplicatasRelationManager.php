@@ -53,7 +53,8 @@ class DuplicatasRelationManager extends RelationManager
         return $table
             ->columns([
                 TextColumn::make('id')->label('Código'),
-                TextColumn::make('valor'),
+                TextColumn::make('valor')
+                    ->money('BRL'),
                 TextColumn::make('vencimento')->date(),
                 BadgeColumn::make('status')
                     ->colors([
