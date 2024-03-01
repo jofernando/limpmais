@@ -6,9 +6,14 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Resources\RelationManagers\RelationManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class Duplicata extends Model
@@ -41,6 +46,11 @@ class Duplicata extends Model
         return $this->belongsTo(Cliente::class);
     }
 
+    public function pagamentos(): HasMany
+    {
+        return $this->hasMany(Pagamento::class);
+    }
+
     public function getStatusAttribute(): string
     {
         if($this->pagamento) return 'pago';
@@ -70,6 +80,17 @@ class Duplicata extends Model
                         })
                         ->reactive(),
                 ])->columns(3),
+            Grid::make()
+                ->schema([
+                    Repeater::make('pagamentos')
+                        ->schema([
+                            PtbrMoney::make('valor'),
+                            DatePicker::make('data')
+                        ])
+                        ->defaultItems(0)
+                        ->relationship()
+                        ->columns(2)
+                ])->columns(1),
             Grid::make()
                 ->schema([
                     MarkdownEditor::make('observacao')
