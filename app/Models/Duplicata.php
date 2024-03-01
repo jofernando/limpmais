@@ -51,6 +51,11 @@ class Duplicata extends Model
         return $this->hasMany(Pagamento::class);
     }
 
+    public function getPagamentoRestanteAttribute(): string
+    {
+        return number_format($this->valor - $this->pagamentos()->sum('valor'), 2);
+    }
+
     public function getStatusAttribute(): string
     {
         $valor_pago = $this->pagamentos()->sum('valor');
@@ -86,7 +91,7 @@ class Duplicata extends Model
                     Repeater::make('pagamentos')
                         ->schema([
                             PtbrMoney::make('valor'),
-                            DatePicker::make('data')
+                            DatePicker::make('data')->requiredWith('valor')
                         ])
                         ->defaultItems(0)
                         ->relationship()
