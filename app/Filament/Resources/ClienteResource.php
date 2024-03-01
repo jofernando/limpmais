@@ -14,6 +14,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Model;
 use Leandrocfe\FilamentPtbrFormFields\PtbrCpfCnpj;
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class ClienteResource extends Resource
 {
@@ -64,7 +65,7 @@ class ClienteResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('setor')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('divida')
+                PtbrMoney::make('divida')
                     ->label('Dívida')
                     ->visibleOn(Pages\ViewCliente::class),
             ]);
