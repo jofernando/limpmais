@@ -63,6 +63,8 @@ class Cliente extends Model
 
     public function getDividaAttribute()
     {
-        return $this->duplicatas()->whereNull('pagamento')->sum('valor');
+        $valor = $this->duplicatas()->sum('valor');
+        $pago = $this->duplicatas()->withSum('pagamentos', 'valor')->get()->sum('pagamentos_sum_valor');
+        return number_format($valor - $pago, 2);
     }
 }

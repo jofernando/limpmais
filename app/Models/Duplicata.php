@@ -53,7 +53,8 @@ class Duplicata extends Model
 
     public function getStatusAttribute(): string
     {
-        if($this->pagamento) return 'pago';
+        $valor_pago = $this->pagamentos()->sum('valor');
+        if($this->valor <= $valor_pago) return 'pago';
         if($this->vencimento < now()) return 'vencido';
         else return 'pendente';
     }
