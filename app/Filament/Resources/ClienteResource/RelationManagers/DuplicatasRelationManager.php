@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ClienteResource\RelationManagers;
 
+use App\Models\Duplicata;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -15,6 +16,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class DuplicatasRelationManager extends RelationManager
 {
@@ -24,28 +26,7 @@ class DuplicatasRelationManager extends RelationManager
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                TextInput::make('valor')
-                    ->numeric()
-                    ->required(),
-                DatePicker::make('vencimento')
-                    ->required()
-                    ->default(Carbon::now()->addDays(30)),
-                TextInput::make('pago')
-                    ->numeric()
-                    ->label('Valor recebido')
-                    ->requiredWith('pagamento')
-                    ->hiddenOn('create'),
-                DatePicker::make('pagamento')
-                    ->requiredWith('pago')
-                    ->hiddenOn('create'),
-                Grid::make()
-                    ->schema([
-                        MarkdownEditor::make('observacao')
-                            ->label('Observação'),
-                    ])->columns(1),
-            ]);
+        return $form->schema(Duplicata::getForm());
     }
 
     public static function table(Table $table): Table

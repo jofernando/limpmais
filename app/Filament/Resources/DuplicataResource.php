@@ -29,49 +29,18 @@ class DuplicataResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
+        $formulario = Duplicata::getForm();
+        $grid = Grid::make()
             ->schema([
-                Grid::make()
-                    ->schema([
-                        Select::make('cliente_id')
-                            ->required()
-                            ->label('Código do cliente')
-                            ->searchable()
-                            ->getSearchResultsUsing(fn (string $search) => Cliente::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(50)->pluck('nome', 'id'))
-                            ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome),
-                    ])->columns(1),
-                PtbrMoney::make('valor')
-                    ->required(),
-                DatePicker::make('vencimento')
+                Select::make('cliente_id')
                     ->required()
-                    ->default(now()->addDays(30)),
-                PtbrMoney::make('pago')
-                    ->label('Valor recebido')
-                    ->requiredWith('pagamento')
-                    ->hiddenOn('create'),
-                DatePicker::make('pagamento')
-                    ->requiredWith('pago')
-                    ->hiddenOn('create'),
-                Grid::make()
-                    ->schema([
-                        PtbrMoney::make('compra')->reactive(),
-                        PtbrMoney::make('gastos')->reactive(),
-                        Forms\Components\Placeholder::make('final')
-                            ->content(function($get) {
-                                $gastos = str_replace('.', '', $get('gastos'));
-                                $compra = str_replace('.', '', $get('compra'));
-                                $gastos = str_replace(',', '.', $gastos);
-                                $compra = str_replace(',', '.', $compra);
-                                return number_format(floatval($compra) + floatval($gastos), '2', ',', '.');
-                            })
-                            ->reactive(),
-                    ])->columns(3),
-                Grid::make()
-                    ->schema([
-                        MarkdownEditor::make('observacao')
-                            ->label('Observação'),
-                    ])->columns(1),
-            ]);
+                    ->label('Código do cliente')
+                    ->searchable()
+                    ->getSearchResultsUsing(fn (string $search) => Cliente::where('nome', 'ilike', "%{$search}%")->orWhere('id', intval($search))->limit(50)->pluck('nome', 'id'))
+                    ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome),
+            ])->columns(1);
+        array_unshift($formulario, $grid);
+        return $form->schema($formulario);
     }
 
     public static function table(Table $table): Table

@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Placeholder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class Duplicata extends Model
 {
@@ -41,5 +46,35 @@ class Duplicata extends Model
         if($this->pagamento) return 'pago';
         if($this->vencimento < now()) return 'vencido';
         else return 'pendente';
+    }
+
+    public static function getForm(): array
+    {
+        return [
+            PtbrMoney::make('valor')
+                ->required(),
+            DatePicker::make('vencimento')
+                ->required()
+                ->default(now()->addDays(30)),
+            Grid::make()
+                ->schema([
+                    PtbrMoney::make('compra')->reactive(),
+                    PtbrMoney::make('gastos')->reactive(),
+                    Placeholder::make('final')
+                        ->content(function($get) {
+                            $gastos = str_replace('.', '', $get('gastos'));
+                            $compra = str_replace('.', '', $get('compra'));
+                            $gastos = str_replace(',', '.', $gastos);
+                            $compra = str_replace(',', '.', $compra);
+                            return number_format(floatval($compra) + floatval($gastos), '2', ',', '.');
+                        })
+                        ->reactive(),
+                ])->columns(3),
+            Grid::make()
+                ->schema([
+                    MarkdownEditor::make('observacao')
+                        ->label('Observação'),
+                ])->columns(1),
+        ];
     }
 }
