@@ -74,8 +74,7 @@
                 <div class="data">{{$data}}</div>
                 <div class="hora">{{$hora}}</div>
             </div>
-            <div class="nome-empresa">limp mais</div>
-            <div class="cnpj">cnpj: 10.698.484-0001-48</div>
+            <div class="nome-empresa">{{config('app.name')}}</div>
             <div class="titulo">extrato para simples conferência</div>
             <div class="cliente">cliente: {{$duplicata['codigo']}} {{$duplicata['nome']}}</div>
             <div class="vencimento">data de vencimento: {{$duplicata['data_vencimento']}}</div>
