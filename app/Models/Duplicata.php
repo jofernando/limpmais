@@ -53,7 +53,7 @@ class Duplicata extends Model
 
     public function getPagamentoRestanteAttribute(): string
     {
-        return number_format($this->valor - $this->pagamentos()->sum('valor'), 2);
+        return number_format($this->valor - $this->pagamentos()->sum('valor'), 2, '.', '');
     }
 
     public function getStatusAttribute(): string
