@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Imports\ClienteImport;
 use App\Imports\DuplicataImport;
+use App\Models\Cliente;
+use App\Models\Duplicata;
+use App\Models\Pagamento;
 use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -16,7 +19,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Excel::import(new ClienteImport, 'CLIENTES.xls');
-        Excel::import(new DuplicataImport, 'DUPLRECE.xls');
+        Cliente::factory()->has(
+            Duplicata::factory()->count(3)->has(
+                Pagamento::factory()->count(2)->state(
+                    function (array $attributes, Duplicata $duplicata) {
+                        return ['valor' => $duplicata->valor / 3];
+                    }
+                )
+            )
+        )->count(30)->create();
     }
 }

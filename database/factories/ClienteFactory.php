@@ -21,7 +21,11 @@ class ClienteFactory extends Factory
             "rua" => $this->faker->streetName,
             "numero" => $this->faker->buildingNumber,
             "cidade" => $this->faker->city,
-            "estado" => $this->faker->state
+            "estado" => $this->faker->state,
+            "ponto_referencia" => $this->faker->sentence(3),
+            'observacao' => $this->faker->sentence(10),
+            'setor' => $this->faker->sentence(1),
+            'cpf_cnpj' => $this->faker->cpf(),
         ];
     }
 }
