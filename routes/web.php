@@ -6,6 +6,7 @@ use App\Http\Livewire\Auth\Login;
 use App\Http\Livewire\Auth\Passwords\Confirm;
 use App\Http\Livewire\Auth\Passwords\Email;
 use App\Http\Livewire\Auth\Passwords\Reset;
+use App\Http\Livewire\Auth\Passwords\Update;
 use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\Auth\Verify;
 use App\Jobs\ImportarCustomers;
@@ -43,6 +44,8 @@ Route::get('password/reset', Email::class)
 Route::get('password/reset/{token}', Reset::class)
     ->name('password.reset');
 
+
+
 Route::middleware('auth')->group(function () {
     Route::get('email/verify', Verify::class)
         ->middleware('throttle:6,1')
@@ -50,6 +53,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('password/confirm', Confirm::class)
         ->name('password.confirm');
+
+    Route::get('password/update', Update::class)
+        ->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {

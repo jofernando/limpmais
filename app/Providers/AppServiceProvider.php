@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Filament\Facades\Filament;
 use Illuminate\Support\ServiceProvider;
+use Filament\Navigation\UserMenuItem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,9 +29,9 @@ class AppServiceProvider extends ServiceProvider
             'https://unpkg.com/@alpinejs/mask@3.x.x/dist/cdn.min.js',
         ], true);
         Filament::serving(function () {
-            Filament::registerNavigationGroups([
-                'Cliente',
-                'Lancar'
+            Filament::registerUserMenuItems([
+                'update-password' => UserMenuItem::make()->url(route('password.update'))->label('Alterar senha'),
+                // ...
             ]);
         });
     }
