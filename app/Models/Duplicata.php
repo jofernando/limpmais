@@ -85,18 +85,46 @@ class Duplicata extends Model
                             return number_format(floatval($compra) + floatval($gastos), '2', ',', '.');
                         })
                         ->reactive(),
-                ])->columns(3),
+                    Placeholder::make('lucro')
+                        ->content(function($get) {
+                            $gastos = str_replace('.', '', $get('gastos'));
+                            $gastos = str_replace(',', '.', $gastos);
+                            $compra = str_replace('.', '', $get('compra'));
+                            $compra = str_replace(',', '.', $compra);
+                            $valor = str_replace('.', '', $get('valor'));
+                            $valor = str_replace(',', '.', $valor);
+                            return number_format(floatval($valor) - floatval($compra) - floatval($gastos), '2', ',', '.');
+                        })
+                        ->reactive()
+                ])->columns(2),
             Grid::make()
                 ->schema([
                     Repeater::make('pagamentos')
                         ->schema([
-                            PtbrMoney::make('valor'),
-                            DatePicker::make('data')->requiredWith('valor')
+                            PtbrMoney::make('valor')
+                                ->reactive(),
+                            DatePicker::make('data')->requiredWith('valor'),
+                            Select::make('metodo_pagamento_id')
+                                ->label('Método de pagamento')
+                                ->relationship('metodoPagamento', 'tipo'),
                         ])
                         ->defaultItems(0)
                         ->relationship()
-                        ->columns(2)
+                        ->columns(3)
+                        ->reactive()
                 ])->columns(1),
+            PlaceHolder::make('a_receber')
+                ->label('Pagamento restante')
+                ->content(function ($get) {
+                    $result = collect($get('pagamentos'))->pluck('valor')->map(function ($item) {
+                        $valor = str_replace('.', '', $item);
+                        $valor = str_replace(',', '.', $valor);
+                        return floatval($valor);
+                    })->sum();
+                    $valor = str_replace('.', '', $get('valor'));
+                    $valor = str_replace(',', '.', $valor);
+                    return "R$ " . number_format(floatval($valor) - $result, '2', ',', '.');
+            }),
             Grid::make()
                 ->schema([
                     MarkdownEditor::make('observacao')

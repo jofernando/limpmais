@@ -14,11 +14,17 @@ class Pagamento extends Model
         'valor',
         'data',
         'duplicata_id',
+        'metodo_pagamento_id',
     ];
 
 
     public function duplicata(): BelongsTo
     {
         return $this->belongsTo(Duplicata::class);
+    }
+
+    public function metodoPagamento(): BelongsTo
+    {
+        return $this->belongsTo(MetodoPagamento::class);
     }
 }
