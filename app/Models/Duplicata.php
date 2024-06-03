@@ -6,14 +6,19 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\TernaryFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class Duplicata extends Model
@@ -131,5 +136,29 @@ class Duplicata extends Model
                         ->label('Observação'),
                 ])->columns(1),
         ];
+    }
+
+    public static function statusFilter()
+    {
+        return Filter::make('status')
+            ->form([
+                Radio::make('option')
+                    ->label('Status')
+                    ->options([
+                        'liquidadas' => 'Líquidadas',
+                        'areceber' => 'A receber',
+                    ]),
+            ])
+            ->query(function (Builder $query, array $data): Builder {
+                return $query
+                    ->when(
+                        $data['option'] == 'liquidadas',
+                        fn (Builder $query) => $query->whereHas('pagamentos', fn ($query) => $query->select(DB::raw('SUM(pagamentos.valor)'))->groupBy('duplicata_id')->havingRaw('SUM(pagamentos.valor) = duplicatas.valor'))
+                    )
+                    ->when(
+                        $data['option'] == 'areceber',
+                        fn (Builder $query) => $query->whereHas('pagamentos', fn ($query) => $query->select(DB::raw('SUM(pagamentos.valor)'))->groupBy('duplicata_id')->havingRaw('SUM(pagamentos.valor) <> duplicatas.valor'))->orWhereDoesntHave('pagamentos')
+                    );
+            });
     }
 }

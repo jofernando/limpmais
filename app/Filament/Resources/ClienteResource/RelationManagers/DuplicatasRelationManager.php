@@ -45,7 +45,7 @@ class DuplicatasRelationManager extends RelationManager
                     ]),
             ])
             ->filters([
-                //
+                Duplicata::statusFilter(),
             ])->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])

@@ -8,11 +8,15 @@ use App\Forms\Components\CpfCnpj;
 use App\Models\Cliente;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Radio;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentPtbrFormFields\PtbrCpfCnpj;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
@@ -76,13 +80,14 @@ class ClienteResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('Código'),
-                Tables\Columns\TextColumn::make('nome'),
+                Tables\Columns\TextColumn::make('nome')->sortable(),
                 Tables\Columns\TextColumn::make('endereco')->label('Endereço'),
                 Tables\Columns\TextColumn::make('divida')->money('BRL')
                     ->label('Dívida'),
             ])
+            ->defaultSort('nome')
             ->filters([
-                //
+                Cliente::statusFilter(),
             ]);
     }
 

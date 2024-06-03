@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -17,8 +18,12 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class DuplicataResource extends Resource
@@ -49,7 +54,7 @@ class DuplicataResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('Código'),
                 Tables\Columns\TextColumn::make('cliente.identificacao'),
-                Tables\Columns\TextColumn::make('valor')->money('BRL'),
+                Tables\Columns\TextColumn::make('valor')->money('BRL')->sortable(),
                 Tables\Columns\TextColumn::make('pagamento_restante')->money('BRL'),
                 BadgeColumn::make('status')
                     ->colors([
@@ -59,7 +64,7 @@ class DuplicataResource extends Resource
                     ]),
             ])
             ->filters([
-                //
+                Duplicata::statusFilter(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
