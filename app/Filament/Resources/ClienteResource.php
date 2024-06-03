@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClienteResource\Pages;
 use App\Filament\Resources\ClienteResource\RelationManagers\DuplicatasRelationManager;
+use App\Filament\Resources\ClienteResource\RelationManagers\VendasRelationManager;
 use App\Forms\Components\CpfCnpj;
 use App\Models\Cliente;
 use Filament\Forms;
@@ -95,6 +96,7 @@ class ClienteResource extends Resource
     {
         return [
             DuplicatasRelationManager::class,
+            VendasRelationManager::class,
         ];
     }
 
