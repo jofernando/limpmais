@@ -36,6 +36,8 @@ class MetodoPagamentoResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tipo'),
+                Tables\Columns\TextColumn::make('valor_recebido')->money('BRL')
+                    ->label('Valor recebido'),
             ])
             ->filters([
                 //
