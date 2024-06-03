@@ -18,6 +18,9 @@ class Contrato extends Model
         'toneladas',
         'sacas',
         'data',
+        'vigencia',
+        'produto_id',
+        'n_contrato',
         'observacao'
     ];
 
