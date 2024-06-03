@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\FornecedorResource\RelationManagers;
 
 use App\Forms\Components\Dinheiro;
+use App\Models\Motorista;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
@@ -54,11 +55,7 @@ class ContratosRelationManager extends RelationManager
                                 Forms\Components\DatePicker::make('data'),
                                 Forms\Components\Select::make('motorista_id')
                                     ->label('Motorista')
-                                    ->options(function (RelationManager $livewire): array {
-                                        return $livewire->ownerRecord->motoristas()
-                                            ->pluck('nome', 'id')
-                                            ->toArray();
-                                    })
+                                    ->options(Motorista::all()->pluck('nome', 'id'))
                                     ->required(),
                                 Forms\Components\TextInput::make('toneladas')
                                     ->numeric()

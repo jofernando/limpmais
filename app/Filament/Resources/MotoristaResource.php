@@ -1,21 +1,23 @@
 <?php
 
-namespace App\Filament\Resources\FornecedorResource\RelationManagers;
+namespace App\Filament\Resources;
 
+use App\Filament\Resources\MotoristaResource\Pages;
+use App\Filament\Resources\MotoristaResource\RelationManagers;
+use App\Models\Motorista;
 use Filament\Forms;
 use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Leandrocfe\FilamentPtbrFormFields\PtbrPhone;
 
-class MotoristasRelationManager extends RelationManager
+class MotoristaResource extends Resource
 {
-    protected static string $relationship = 'motoristas';
+    protected static ?string $model = Motorista::class;
 
-    protected static ?string $recordTitleAttribute = 'nome';
+    protected static ?string $navigationIcon = 'heroicon-o-collection';
 
     public static function form(Form $form): Form
     {
@@ -24,7 +26,8 @@ class MotoristasRelationManager extends RelationManager
                 Forms\Components\TextInput::make('nome')
                     ->required()
                     ->maxLength(255),
-                PtbrPhone::make('celular'),
+                Forms\Components\TextInput::make('celular')
+                    ->maxLength(255),
             ]);
     }
 
@@ -38,9 +41,6 @@ class MotoristasRelationManager extends RelationManager
             ->filters([
                 //
             ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
-            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -49,4 +49,11 @@ class MotoristasRelationManager extends RelationManager
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
+    
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ManageMotoristas::route('/'),
+        ];
+    }    
 }

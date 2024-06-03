@@ -23,11 +23,6 @@ class Fornecedor extends Model
         return $this->hasMany(Contrato::class);
     }
 
-    public function motoristas(): HasMany
-    {
-        return $this->hasMany(Motorista::class);
-    }
-
     public function resgates(): HasMany
     {
         return $this->hasMany(Resgate::class);

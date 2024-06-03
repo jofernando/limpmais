@@ -66,7 +66,6 @@ class FornecedorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\MotoristasRelationManager::class,
             RelationManagers\ContratosRelationManager::class,
             RelationManagers\ResgatesRelationManager::class,
         ];

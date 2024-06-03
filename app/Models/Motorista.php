@@ -16,11 +16,6 @@ class Motorista extends Model
         'celular'
     ];
 
-    public function fornecedor(): BelongsTo
-    {
-        return $this->belongsTo(Fornecedor::class);
-    }
-
     public function entregas(): HasMany
     {
         return $this->hasMany(Entrega::class);
