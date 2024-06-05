@@ -7,6 +7,7 @@ use App\Filament\Resources\ClienteResource\RelationManagers\DuplicatasRelationMa
 use App\Filament\Resources\ClienteResource\RelationManagers\VendasRelationManager;
 use App\Forms\Components\CpfCnpj;
 use App\Models\Cliente;
+use Filament\Actions\CreateAction;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Radio;
@@ -89,7 +90,18 @@ class ClienteResource extends Resource
             ->defaultSort('nome')
             ->filters([
                 Cliente::statusFilter(),
-            ]);
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->headerActions(
+                []
+            )
+            ;
     }
 
     public static function getRelations(): array
