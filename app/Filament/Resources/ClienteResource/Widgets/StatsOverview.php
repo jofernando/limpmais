@@ -14,9 +14,9 @@ class StatsOverview extends BaseWidget
     {
         $mes = [now()->subDays(30), now()];
         $recebidos = Pagamento::whereBetween('data', $mes)->sum('valor');
-        $duplicatas = Duplicata::whereBetween('created_at', $mes)->get();
+        $duplicatas = Duplicata::whereBetween('venda', $mes)->get();
         $vendas = $duplicatas->sum('valor');
-        $compras = $duplicatas->sum('compras');
+        $compras = $duplicatas->sum('compra');
         $gastos = $duplicatas->sum('gastos');
         $lucro = $vendas - $compras - $gastos;
         return [
