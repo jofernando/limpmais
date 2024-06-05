@@ -53,7 +53,7 @@ class ContratosRelationManager extends RelationManager
                 Forms\Components\Select::make('tipo')
                     ->options([
                         'sacas' => 'Sacas',
-                        'toneladas' => 'Toneladas',
+                        'toneladas' => 'Toneladas/kg',
                     ])->required()
                     ->reactive(),
                 Forms\Components\TextInput::make('toneladas')
@@ -61,6 +61,9 @@ class ContratosRelationManager extends RelationManager
                     ->reactive()
                     ->requiredIf('tipo', 'toneladas')
                     ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas'),
+                PtbrMoney::make('valor_kg')
+                        ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas')
+                        ->reactive(),
                 Forms\Components\TextInput::make('sacas')
                     ->numeric()
                     ->requiredIf('tipo', 'sacas')
@@ -137,6 +140,8 @@ class ContratosRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('valor')->money('BRL'),
                 Tables\Columns\TextColumn::make('data')->date(),
+                Tables\Columns\TextColumn::make('vigencia')->date(),
+                Tables\Columns\TextColumn::make('restante'),
             ])
             ->filters([
                 //
