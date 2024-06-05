@@ -5,11 +5,13 @@ namespace App\Filament\Resources\FornecedorResource\RelationManagers;
 use App\Forms\Components\Dinheiro;
 use App\Models\Motorista;
 use App\Models\Produto;
+use App\Models\Veiculo;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
@@ -31,6 +33,8 @@ class ContratosRelationManager extends RelationManager
                 Select::make('produto_id')
                     ->label('Produto')
                     ->options(Produto::all()->pluck('nome', 'id')),
+                TextInput::make('n_contrato')
+                    ->label('Nº do contrato'),
                 Grid::make()
                     ->schema([
                         PtbrMoney::make('valor')
@@ -65,11 +69,14 @@ class ContratosRelationManager extends RelationManager
                     ->schema([
                         Forms\Components\Repeater::make('entregas')
                             ->schema([
-                                Forms\Components\DatePicker::make('data'),
                                 Forms\Components\Select::make('motorista_id')
                                     ->label('Motorista')
                                     ->options(Motorista::all()->pluck('nome', 'id'))
                                     ->required(),
+                                Forms\Components\Select::make('veiculo_id')
+                                    ->label('Veículo')
+                                    ->options(Veiculo::all()->pluck('placa', 'id')),
+                                Forms\Components\DatePicker::make('data'),
                                 Forms\Components\TextInput::make('toneladas')
                                     ->numeric()
                                     ->requiredIf('tipo', 'toneladas')
@@ -78,10 +85,11 @@ class ContratosRelationManager extends RelationManager
                                     ->numeric()
                                     ->requiredIf('tipo', 'sacas')
                                     ->hidden(fn (\Closure $get) => $get('../../tipo') != 'sacas'),
+                                
                             ])
                             ->relationship()
                             ->reactive()
-                            ->columns(3)
+                            ->columns(2)
                     ])->columns(1),
                 Grid::make()
                     ->schema([

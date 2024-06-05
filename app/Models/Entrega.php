@@ -14,7 +14,8 @@ class Entrega extends Model
         'data',
         'toneladas',
         'sacas',
-        'motorista_id'
+        'motorista_id',
+        'veiculo_id',
     ];
 
     /**
@@ -35,5 +36,15 @@ class Entrega extends Model
     public function motorista(): BelongsTo
     {
         return $this->belongsTo(Motorista::class);
+    }
+
+    /**
+     * Get the veiculo that owns the Entrega
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function veiculo(): BelongsTo
+    {
+        return $this->belongsTo(Veiculo::class);
     }
 }
