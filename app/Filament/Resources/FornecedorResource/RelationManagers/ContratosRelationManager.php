@@ -16,6 +16,7 @@ use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
@@ -138,10 +139,11 @@ class ContratosRelationManager extends RelationManager
     {
         return $table
             ->columns([
+                TextColumn::make('produto.nome'),
                 Tables\Columns\TextColumn::make('valor')->money('BRL'),
                 Tables\Columns\TextColumn::make('data')->date(),
-                Tables\Columns\TextColumn::make('vigencia')->date(),
-                Tables\Columns\TextColumn::make('restante'),
+                Tables\Columns\TextColumn::make('vigencia')->date()->label('Vigência'),
+                Tables\Columns\TextColumn::make('restante')->label('Qtd restante'),
             ])
             ->filters([
                 //

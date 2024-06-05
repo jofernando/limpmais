@@ -41,6 +41,16 @@ class Contrato extends Model
     }
 
     /**
+     * Get the produto that owns the Contrato
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function produto(): BelongsTo
+    {
+        return $this->belongsTo(Produto::class);
+    }
+
+    /**
      * Get all of the entregas for the Contrato
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
