@@ -12,9 +12,9 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +27,7 @@ class ContratosRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'valor';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -61,14 +61,14 @@ class ContratosRelationManager extends RelationManager
                     ->numeric()
                     ->reactive()
                     ->requiredIf('tipo', 'toneladas')
-                    ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas'),
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('tipo') != 'toneladas'),
                 PtbrMoney::make('valor_kg')
-                        ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas')
+                        ->hidden(fn (\Filament\Forms\Get $get) => $get('tipo') != 'toneladas')
                         ->reactive(),
                 Forms\Components\TextInput::make('sacas')
                     ->numeric()
                     ->requiredIf('tipo', 'sacas')
-                    ->hidden(fn (\Closure $get) => $get('tipo') != 'sacas'),
+                    ->hidden(fn (\Filament\Forms\Get $get) => $get('tipo') != 'sacas'),
                 Grid::make()
                     ->schema([
                         Forms\Components\Repeater::make('entregas')
@@ -84,11 +84,11 @@ class ContratosRelationManager extends RelationManager
                                 Forms\Components\TextInput::make('toneladas')
                                     ->numeric()
                                     ->requiredIf('tipo', 'toneladas')
-                                    ->hidden(fn (\Closure $get) => $get('../../tipo') != 'toneladas'),
+                                    ->hidden(fn (\Filament\Forms\Get $get) => $get('../../tipo') != 'toneladas'),
                                 Forms\Components\TextInput::make('sacas')
                                     ->numeric()
                                     ->requiredIf('tipo', 'sacas')
-                                    ->hidden(fn (\Closure $get) => $get('../../tipo') != 'sacas'),
+                                    ->hidden(fn (\Filament\Forms\Get $get) => $get('../../tipo') != 'sacas'),
                                 
                             ])
                             ->relationship()
@@ -135,7 +135,7 @@ class ContratosRelationManager extends RelationManager
             ->columns(1);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

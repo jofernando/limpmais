@@ -7,9 +7,9 @@ use App\Filament\Resources\FornecedorResource\RelationManagers;
 use App\Forms\Components\CpfCnpj;
 use App\Models\Fornecedor;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -20,7 +20,7 @@ class FornecedorResource extends Resource
 {
     protected static ?string $model = Fornecedor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $modelLabel = 'fornecedores';
 

@@ -10,7 +10,7 @@ class EditDuplicata extends EditRecord
 {
     protected static string $resource = DuplicataResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

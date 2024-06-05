@@ -16,6 +16,11 @@ class Imprimir extends Page
 
     protected static string $view = 'filament.pages.imprimir';
 
+    public static function canAccess(): bool
+    {
+        return false;
+    }
+
     public $clientes = [
         [
             'cliente_id' => '',
@@ -31,10 +36,10 @@ class Imprimir extends Page
             'nome' => '',
             'divida' => '',
         ];
-        $this->dispatchBrowserEvent('focus_next_input', ['index' => array_key_last($this->clientes)]);
+        $this->dispatch('focus_next_input', ['index' => array_key_last($this->clientes)]);
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('adicionarMuitosClientes')
@@ -75,7 +80,7 @@ class Imprimir extends Page
         } else {
             $this->clientes[$index]['cliente_id'] = null;
         }
-        $this->dispatchBrowserEvent('select_text_in_input_with_focus');
+        $this->dispatch('select_text_in_input_with_focus');
     }
 
     public function submit()

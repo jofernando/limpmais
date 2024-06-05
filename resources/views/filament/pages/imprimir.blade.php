@@ -1,5 +1,5 @@
 <x-filament::page>
-    <form wire:submit.prevent="submit">
+    <form wire:submit="submit">
         <div class="grid grid-cols-1 gap-6 mb-6">
             <span class="text-sm font-medium leading-4 text-gray-700">
                 Clientes
@@ -46,7 +46,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:change="setarValores({{$index}})" wire:model="clientes.{{$index}}.cliente_id" id="cliente_id_{{$index}}" type="number" autofocus required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:change="setarValores({{$index}})" wire:model.live="clientes.{{$index}}.cliente_id" id="cliente_id_{{$index}}" type="number" autofocus required class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -61,7 +61,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:model="clientes.{{$index}}.nome"  type="text" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:model.live="clientes.{{$index}}.nome"  type="text" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -80,7 +80,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="flex items-center space-x-2 rtl:space-x-reverse group">
-                                                            <input wire:model="clientes.{{$index}}.divida"  type="number" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
+                                                            <input wire:model.live="clientes.{{$index}}.divida"  type="number" required disabled class="block w-full transition duration-75 rounded-lg shadow-sm focus:border-primary-500 focus:ring-1 focus:ring-inset focus:ring-primary-500 disabled:opacity-70 border-gray-300">
                                                         </div>
                                                     </div>
                                                 </div>
