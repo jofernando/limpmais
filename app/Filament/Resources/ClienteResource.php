@@ -96,7 +96,6 @@ class ClienteResource extends Resource
     {
         return [
             DuplicatasRelationManager::class,
-            VendasRelationManager::class,
         ];
     }
 

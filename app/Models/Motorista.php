@@ -21,14 +21,4 @@ class Motorista extends Model
     {
         return $this->hasMany(Entrega::class);
     }
-
-    /**
-     * Get all of the motoristaVenda for the Motorista
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function motoristaVenda(): HasMany
-    {
-        return $this->hasMany(MotoristaVenda::class);
-    }
 }

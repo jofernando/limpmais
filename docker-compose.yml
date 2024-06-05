@@ -24,6 +24,8 @@ services:
       test: ['CMD', 'pg_isready', '-q', '-d', '${DB_DATABASE}', '-U', '${DB_USERNAME}']
       retries: 3
       timeout: 5s
+    ports:
+      - 5432:5432
   adminer:
     image: adminer
     ports:

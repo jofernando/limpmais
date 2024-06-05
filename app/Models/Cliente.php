@@ -43,16 +43,6 @@ class Cliente extends Model
         return $this->hasMany(Duplicata::class);
     }
 
-    /**
-     * Get all of the vendas for the Cliente
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function vendas(): HasMany
-    {
-        return $this->hasMany(Venda::class);
-    }
-
     public function getIdentificacaoAttribute(): string
     {
         $rua = $this->rua;

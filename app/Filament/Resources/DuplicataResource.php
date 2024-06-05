@@ -53,7 +53,7 @@ class DuplicataResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('Código'),
-                Tables\Columns\TextColumn::make('cliente.identificacao'),
+                Tables\Columns\TextColumn::make('cliente.nome')->sortable(),
                 Tables\Columns\TextColumn::make('valor')->money('BRL')->sortable(),
                 Tables\Columns\TextColumn::make('pagamento_restante')->money('BRL'),
                 BadgeColumn::make('status')
@@ -62,6 +62,8 @@ class DuplicataResource extends Resource
                         'danger' => fn ($state): bool => $state === 'vencido',
                         'warning' => fn ($state): bool => $state === 'pendente',
                     ]),
+                Tables\Columns\TextColumn::make('motorista.nome')->sortable(),
+                Tables\Columns\TextColumn::make('fornecedor.empresa')->sortable(),
             ])
             ->filters([
                 Duplicata::statusFilter(),

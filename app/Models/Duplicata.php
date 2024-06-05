@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
@@ -33,7 +35,16 @@ class Duplicata extends Model
         'observacao',
         'cliente_id',
         'compra',
-        'gastos'
+        'gastos',
+        'produto_id',
+        'tipo_quantidade',
+        'quantidade',
+        'folguista',
+        'prazo',
+        'venda',
+        'motorista_id',
+        'veiculo_id',
+        'fornecedor_id',
     ];
 
     protected $casts = [
@@ -51,9 +62,39 @@ class Duplicata extends Model
         return $this->belongsTo(Cliente::class);
     }
 
+    /**
+     * Get the veiculo that owns the Duplicata
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function veiculo(): BelongsTo
+    {
+        return $this->belongsTo(Veiculo::class);
+    }
+
     public function pagamentos(): HasMany
     {
         return $this->hasMany(Pagamento::class);
+    }
+
+    /**
+     * Get the motorista that owns the Duplicata
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function motorista(): BelongsTo
+    {
+        return $this->belongsTo(Motorista::class);
+    }
+
+    /**
+     * Get the fornecedor that owns the Duplicata
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function fornecedor(): BelongsTo
+    {
+        return $this->belongsTo(Fornecedor::class);
     }
 
     public function getPagamentoRestanteAttribute(): string
@@ -72,13 +113,27 @@ class Duplicata extends Model
     public static function getForm(): array
     {
         return [
-            PtbrMoney::make('valor')
-                ->required(),
-            DatePicker::make('vencimento')
-                ->required()
-                ->default(now()->addDays(30)),
             Grid::make()
                 ->schema([
+                    PtbrMoney::make('valor')
+                        ->required(),
+                    Radio::make('prazo')
+                        ->options([
+                            8 => 7,
+                            15 => 15,
+                            22 => 21,
+                        ])
+                        ->reactive()
+                        ->afterStateUpdated(fn ($state, Closure $set, Closure $get) => $get('venda') ? $set('vencimento', (new Carbon($get('venda')))->addDays($state)) : $get('vencimento')),
+                    DatePicker::make('venda')
+                        ->required()
+                        ->reactive()
+                        ->afterStateUpdated(fn ($state, Closure $set, Closure $get) => $get('prazo') ? $set('vencimento', (new Carbon($state))->addDays($get('prazo'))) : $get('vencimento'))
+                        ,
+                    DatePicker::make('vencimento')
+                        ->required()
+                        ->disabled(true)
+                        ->default(now()->addDays(7)),
                     PtbrMoney::make('compra')->reactive(),
                     PtbrMoney::make('gastos')->reactive(),
                     Placeholder::make('final')
@@ -100,41 +155,62 @@ class Duplicata extends Model
                             $valor = str_replace(',', '.', $valor);
                             return number_format(floatval($valor) - floatval($compra) - floatval($gastos), '2', ',', '.');
                         })
-                        ->reactive()
-                ])->columns(2),
-            Grid::make()
-                ->schema([
+                        ->reactive(),
                     Repeater::make('pagamentos')
                         ->schema([
                             PtbrMoney::make('valor')
                                 ->reactive(),
                             DatePicker::make('data')->requiredWith('valor'),
                             Select::make('metodo_pagamento_id')
-                                ->label('Método de pagamento')
                                 ->relationship('metodoPagamento', 'tipo'),
                         ])
                         ->defaultItems(0)
                         ->relationship()
                         ->columns(3)
-                        ->reactive()
-                ])->columns(1),
-            PlaceHolder::make('a_receber')
-                ->label('Pagamento restante')
-                ->content(function ($get) {
-                    $result = collect($get('pagamentos'))->pluck('valor')->map(function ($item) {
-                        $valor = str_replace('.', '', $item);
-                        $valor = str_replace(',', '.', $valor);
-                        return floatval($valor);
-                    })->sum();
-                    $valor = str_replace('.', '', $get('valor'));
-                    $valor = str_replace(',', '.', $valor);
-                    return "R$ " . number_format(floatval($valor) - $result, '2', ',', '.');
-            }),
-            Grid::make()
-                ->schema([
+                        ->columnSpan(2)
+                        ->reactive(),
+                    PlaceHolder::make('a_receber')
+                        ->label('Pagamento restante')
+                        ->content(function ($get) {
+                            $result = collect($get('pagamentos'))->pluck('valor')->map(function ($item) {
+                                $valor = str_replace('.', '', $item);
+                                $valor = str_replace(',', '.', $valor);
+                                return floatval($valor);
+                            })->sum();
+                            $valor = str_replace('.', '', $get('valor'));
+                            $valor = str_replace(',', '.', $valor);
+                            return "R$ " . number_format(floatval($valor) - $result, '2', ',', '.');
+                        }),
                     MarkdownEditor::make('observacao')
-                        ->label('Observação'),
-                ])->columns(1),
+                        ->label('Observação')
+                        ->columnSpan(2),
+                    Select::make('fornecedor_id')
+                        ->label('Fornecedor')
+                        ->options(Fornecedor::all()->pluck('empresa', 'id')),
+                    Select::make('produto_id')
+                        ->label('Produto')
+                        ->options(Produto::all()->pluck('nome', 'id')),
+                    Select::make('tipo_quantidade')
+                        ->label('Tipo da quantidade')
+                        ->options([
+                            'toneladas' => 'Toneladas',
+                            'sacos40' => 'Sacos 40kg',
+                            'sacos50' => 'Sacos 50kg',
+                            'sacos60' => 'Sacos 60kg',
+                        ]),
+                    TextInput::make('quantidade')
+                        ->numeric(),
+                    Select::make('motorista_id')
+                        ->label('Motorista')
+                        ->options(Motorista::all()->pluck('nome', 'id')),
+                    Select::make('veiculo_id')
+                        ->label('Veiculo')
+                        ->options(Veiculo::all()->pluck('placa', 'id')),
+                    TextInput::make('folguista')
+                        ->columnSpan(2),
+                ])
+                ->columns(2),
+            
         ];
     }
 
