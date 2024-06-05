@@ -42,6 +42,7 @@ class Duplicata extends Model
         'folguista',
         'prazo',
         'venda',
+        'outros',
         'motorista_id',
         'veiculo_id',
         'fornecedor_id',
@@ -190,6 +191,7 @@ class Duplicata extends Model
                     Select::make('produto_id')
                         ->label('Produto')
                         ->options(Produto::all()->pluck('nome', 'id')),
+                    TextInput::make('outros')->label('Outros produtos')->columnSpan(2),
                     Select::make('tipo_quantidade')
                         ->label('Tipo da quantidade')
                         ->options([
