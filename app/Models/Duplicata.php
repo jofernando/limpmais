@@ -239,4 +239,21 @@ class Duplicata extends Model
                     );
             });
     }
+
+    public static function statusVencimento()
+    {
+        return Filter::make('vencimento')
+        ->form([
+            Radio::make('vencimento')
+                ->label('Vencimento')
+                ->options([
+                    7 => '7 dias',
+                    15 => '15 dias',
+                    21 => '21 dias',
+                ]),
+        ])
+        ->query(function (Builder $query, array $data): Builder {
+            return $query->when($data['vencimento'], fn (Builder $query) => $query->whereBetween('vencimento', [now(), now()->addDays($data['vencimento'])]));
+        });
+    }
 }

@@ -68,6 +68,7 @@ class DuplicataResource extends Resource
             ])
             ->filters([
                 Duplicata::statusFilter(),
+                Duplicata::statusVencimento(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

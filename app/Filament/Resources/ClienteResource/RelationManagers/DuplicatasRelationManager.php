@@ -47,6 +47,7 @@ class DuplicatasRelationManager extends RelationManager
             ])
             ->filters([
                 Duplicata::statusFilter(),
+                Duplicata::statusVencimento(),
             ])->headerActions([
                 Tables\Actions\CreateAction::make(),
             ])
