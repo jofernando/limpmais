@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\MetodoPagamentoResource\Pages;
 use App\Filament\Resources\MetodoPagamentoResource\RelationManagers;
 use App\Models\MetodoPagamento;
@@ -47,6 +48,7 @@ class MetodoPagamentoResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\ClienteResource\Pages;
 use App\Filament\Resources\ClienteResource\RelationManagers\DuplicatasRelationManager;
 use App\Filament\Resources\ClienteResource\RelationManagers\VendasRelationManager;
@@ -87,6 +88,9 @@ class ClienteResource extends Resource
                     ->label('Dívida'),
             ])
             ->defaultSort('nome')
+            ->bulkActions([
+                FilamentExportBulkAction::make('Exportar')
+            ])
             ->filters([
                 Cliente::statusFilter(),
             ]);

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1.0",
+        "alperenersoy/filament-export": "^0.3.9",
         "barryvdh/laravel-dompdf": "^2.0",
         "doctrine/dbal": "^3.3",
         "filament/filament": "^v2.17.18",

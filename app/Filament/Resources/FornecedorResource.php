@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\FornecedorResource\Pages;
 use App\Filament\Resources\FornecedorResource\RelationManagers;
 use App\Forms\Components\CpfCnpj;
@@ -59,6 +60,7 @@ class FornecedorResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\MotoristaResource\Pages;
 use App\Filament\Resources\MotoristaResource\RelationManagers;
 use App\Models\Motorista;
@@ -46,6 +47,7 @@ class MotoristaResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

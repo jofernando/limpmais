@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\VeiculoResource\Pages;
 use App\Filament\Resources\VeiculoResource\RelationManagers;
 use App\Models\Veiculo;
@@ -46,6 +47,7 @@ class VeiculoResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ClienteResource\RelationManagers;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Models\Duplicata;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -54,6 +55,7 @@ class DuplicatasRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

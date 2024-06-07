@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\FornecedorResource\RelationManagers;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Forms\Components\Dinheiro;
 use App\Models\Motorista;
 use App\Models\Produto;
@@ -156,6 +157,7 @@ class ContratosRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }

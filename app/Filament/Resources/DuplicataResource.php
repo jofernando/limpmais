@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\DuplicataResource\Pages;
 use App\Filament\Resources\DuplicataResource\RelationManagers;
 use App\Models\Cliente;
@@ -72,6 +73,7 @@ class DuplicataResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
+                FilamentExportBulkAction::make('Exportar'),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
