@@ -24,7 +24,7 @@ class DuplicataFactory extends Factory
         rsort($numeros);
         return [
             'valor' => $numeros[0],
-            'vencimento' => now()->addMonth(1),
+            'vencimento' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
             'observacao' => $this->faker->sentence(4),
             'compra' => $numeros[1],
             'gastos' => $numeros[2],

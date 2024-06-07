@@ -7,6 +7,7 @@ use App\Imports\DuplicataImport;
 use App\Models\Cliente;
 use App\Models\Duplicata;
 use App\Models\Pagamento;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -28,5 +29,7 @@ class DatabaseSeeder extends Seeder
                 )
             )
         )->count(30)->create();
+        Cliente::factory()->count(8)->create();
+        User::factory()->create();
     }
 }
