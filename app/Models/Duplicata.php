@@ -46,6 +46,8 @@ class Duplicata extends Model
         'motorista_id',
         'veiculo_id',
         'fornecedor_id',
+        'cor_id',
+        'tamanho_id',
     ];
 
     protected $casts = [
@@ -96,6 +98,16 @@ class Duplicata extends Model
     public function fornecedor(): BelongsTo
     {
         return $this->belongsTo(Fornecedor::class);
+    }
+
+    public function cor(): BelongsTo
+    {
+        return $this->belongsTo(Cor::class);
+    }
+
+    public function tamanho(): BelongsTo
+    {
+        return $this->belongsTo(Tamanho::class);
     }
 
     public function getPagamentoRestanteAttribute(): string
@@ -191,17 +203,24 @@ class Duplicata extends Model
                     Select::make('produto_id')
                         ->label('Produto')
                         ->options(Produto::all()->pluck('nome', 'id')),
+                    Select::make('cor_id')
+                        ->label('Cor')
+                        ->options(Cor::all()->pluck('cor', 'id')),
+                    Select::make('tamanho_id')
+                        ->label('Tamanho')
+                        ->options(Tamanho::all()->pluck('tamanho', 'id')),
                     TextInput::make('outros')->label('Outros produtos')->columnSpan(2),
-                    Select::make('tipo_quantidade')
-                        ->label('Tipo da quantidade')
-                        ->options([
-                            'toneladas' => 'Toneladas',
-                            'sacos40' => 'Sacos 40kg',
-                            'sacos50' => 'Sacos 50kg',
-                            'sacos60' => 'Sacos 60kg',
-                        ]),
+                    // Select::make('tipo_quantidade')
+                    //     ->label('Tipo da quantidade')
+                    //     ->options([
+                    //         'toneladas' => 'Toneladas',
+                    //         'sacos40' => 'Sacos 40kg',
+                    //         'sacos50' => 'Sacos 50kg',
+                    //         'sacos60' => 'Sacos 60kg',
+                    //     ]),
                     TextInput::make('quantidade')
-                        ->numeric(),
+                        ->numeric()
+                        ->columnSpan(2),
                     Select::make('motorista_id')
                         ->label('Motorista')
                         ->options(Motorista::all()->pluck('nome', 'id')),

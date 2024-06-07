@@ -4,8 +4,10 @@ namespace App\Filament\Resources\FornecedorResource\RelationManagers;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Forms\Components\Dinheiro;
+use App\Models\Cor;
 use App\Models\Motorista;
 use App\Models\Produto;
+use App\Models\Tamanho;
 use App\Models\Veiculo;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -35,6 +37,16 @@ class ContratosRelationManager extends RelationManager
                 Select::make('produto_id')
                     ->label('Produto')
                     ->options(Produto::all()->pluck('nome', 'id')),
+                Grid::make()
+                    ->schema([
+                        Select::make('cor_id')
+                            ->label('Cor')
+                            ->options(Cor::all()->pluck('cor', 'id')),
+                        Select::make('tamanho_id')
+                            ->label('Tamanho')
+                            ->options(Tamanho::all()->pluck('tamanho', 'id')),
+                    ])
+                    ->columns(2),
                 TextInput::make('n_contrato')
                     ->label('Nº do contrato'),
                 Grid::make()
@@ -54,9 +66,12 @@ class ContratosRelationManager extends RelationManager
                     ->label('Observação'),
                 Forms\Components\Select::make('tipo')
                     ->options([
-                        'sacas' => 'Sacas',
-                        'toneladas' => 'Toneladas/kg',
+                        'sacas' => 'Sacos',
+                        // 'toneladas' => 'Toneladas/kg',
                     ])->required()
+                    ->default('sacas')
+                    ->hidden()
+
                     ->reactive(),
                 Forms\Components\TextInput::make('toneladas')
                     ->numeric()
@@ -67,6 +82,7 @@ class ContratosRelationManager extends RelationManager
                         ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas')
                         ->reactive(),
                 Forms\Components\TextInput::make('sacas')
+                    ->label('Quantidade de sacos')
                     ->numeric()
                     ->requiredIf('tipo', 'sacas')
                     ->hidden(fn (\Closure $get) => $get('tipo') != 'sacas'),
@@ -87,6 +103,7 @@ class ContratosRelationManager extends RelationManager
                                     ->requiredIf('tipo', 'toneladas')
                                     ->hidden(fn (\Closure $get) => $get('../../tipo') != 'toneladas'),
                                 Forms\Components\TextInput::make('sacas')
+                                    ->label('Sacos')
                                     ->numeric()
                                     ->requiredIf('tipo', 'sacas')
                                     ->hidden(fn (\Closure $get) => $get('../../tipo') != 'sacas'),
@@ -150,7 +167,12 @@ class ContratosRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['tipo'] = 'sacas';
+                    
+                        return $data;
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

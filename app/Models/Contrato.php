@@ -21,7 +21,9 @@ class Contrato extends Model
         'vigencia',
         'produto_id',
         'n_contrato',
-        'observacao'
+        'observacao',
+        'cor_id',
+        'tamanho_id',
     ];
 
     protected $casts = [
@@ -38,6 +40,16 @@ class Contrato extends Model
     public function fornecedor(): BelongsTo
     {
         return $this->belongsTo(Fornecedor::class);
+    }
+
+    public function cor(): BelongsTo
+    {
+        return $this->belongsTo(Cor::class);
+    }
+
+    public function tamanho(): BelongsTo
+    {
+        return $this->belongsTo(Tamanho::class);
     }
 
     /**
