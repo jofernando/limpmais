@@ -55,7 +55,8 @@ class DuplicatasRelationManager extends RelationManager
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                FilamentExportBulkAction::make('Exportar'),
+                FilamentExportBulkAction::make('Exportar')
+                    ->extraViewData(fn ($livewire) => ['cliente' => $livewire->ownerRecord]),
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
