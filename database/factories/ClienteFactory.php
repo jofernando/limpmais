@@ -19,7 +19,7 @@ class ClienteFactory extends Factory
         return [
             "nome" => $this->faker->name,
             "rua" => $this->faker->streetName,
-            "numero" => $this->faker->buildingNumber,
+            "celular" => $this->faker->cellphoneNumber,
             "cidade" => $this->faker->city,
             "estado" => $this->faker->state,
             "ponto_referencia" => $this->faker->sentence(3),

@@ -44,7 +44,7 @@
     @isset($cliente)
         <p>Nome: {{ $cliente->nome }} </p>
         <p>CPF/CNPJ: {{ $cliente->cpf_cnpj }} </p>
-        <p>Celular: {{ $cliente->numero }} </p>
+        <p>Celular: {{ $cliente->celular }} </p>
         <p>Rua: {{ $cliente->rua }} </p>
         <p>Cidade/Sítio: {{ $cliente->cidade }} </p>
         <p>Estado: {{ $cliente->estado }} </p>

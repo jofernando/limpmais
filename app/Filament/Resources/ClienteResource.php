@@ -58,8 +58,7 @@ class ClienteResource extends Resource
                     ->rule('cpf_ou_cnpj'),
                 Forms\Components\TextInput::make('rua')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('numero')
-                    ->label('Número')
+                Forms\Components\TextInput::make('celular')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('cidade')
                     ->label('Cidade/Sítio')

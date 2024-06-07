@@ -17,7 +17,7 @@ class Cliente extends Model
     protected $fillable = [
         'nome',
         'rua',
-        'numero',
+        'celular',
         'cidade',
         'estado',
         'ponto_referencia',
@@ -46,9 +46,6 @@ class Cliente extends Model
     public function getIdentificacaoAttribute(): string
     {
         $rua = $this->rua;
-        if ($this->numero != null) {
-            $rua = $rua . " Nº " .$this->numero;
-        }
         $linksArray = [$this->nome, $this->ponto_referencia, $rua, $this->cidade];
         $linksArray = array_filter($linksArray, fn($value) => !is_null($value) && $value !== '' && $value !== ' ');
         return implode(", ", $linksArray);
@@ -57,9 +54,6 @@ class Cliente extends Model
     public function getEnderecoAttribute(): string
     {
         $rua = $this->rua;
-        if ($this->numero != null) {
-            $rua = $rua . " Nº " .$this->numero;
-        }
         $linksArray = [$rua, $this->cidade];
         $linksArray = array_filter($linksArray, fn($value) => !is_null($value) && $value !== '' && $value !== ' ');
         return implode(", ", $linksArray);
