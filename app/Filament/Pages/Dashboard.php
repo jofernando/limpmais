@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Models\Duplicata;
+use App\Models\MetodoPagamento;
 use App\Models\Pagamento;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
@@ -52,10 +53,19 @@ class Dashboard extends BasePage implements HasForms
         $lucro = $vendas - $compras - $gastos;
         
         $this->stats = [];
+
         $this->stats[] = [
             'titulo' => 'Duplicatas recebidas',
             'valor' => "R$ " . number_format($recebidos, 2, ',', '.'),
         ];
+
+        foreach (MetodoPagamento::all() as $mp) {
+            $this->stats[] = [
+                'titulo' => $mp->tipo,
+                'valor' => "R$ " . number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->sum('valor'), 2, ',', '.'),
+            ];
+        }
+
         $this->stats[] = [
             'titulo' => 'Compras das duplicatas',
             'valor' => "R$ " . number_format($compras, 2, ',', '.'),
