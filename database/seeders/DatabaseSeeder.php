@@ -2,15 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Imports\ClienteImport;
-use App\Imports\DuplicataImport;
 use App\Models\Cliente;
 use App\Models\Duplicata;
 use App\Models\MetodoPagamento;
 use App\Models\Pagamento;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Maatwebsite\Excel\Facades\Excel;
 
 class DatabaseSeeder extends Seeder
 {

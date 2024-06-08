@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Filament\Pages;
 
 use App\Models\Duplicata;
@@ -11,12 +11,13 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Dashboard as BasePage;
- 
+
 class Dashboard extends BasePage implements HasForms
 {
     use InteractsWithForms;
 
     public $inicio;
+
     public $fim;
 
     public $stats;
@@ -51,44 +52,44 @@ class Dashboard extends BasePage implements HasForms
         $compras = $duplicatas->sum('compra');
         $gastos = $duplicatas->sum('gastos');
         $lucro = $vendas - $compras - $gastos;
-        
+
         $this->stats = [];
 
         $this->stats[] = [
             'titulo' => 'Duplicatas recebidas',
-            'valor' => "R$ " . number_format($recebidos, 2, ',', '.'),
+            'valor' => 'R$ '.number_format($recebidos, 2, ',', '.'),
         ];
 
         foreach (MetodoPagamento::all() as $mp) {
             $this->stats[] = [
                 'titulo' => $mp->tipo,
-                'valor' => "R$ " . number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->sum('valor'), 2, ',', '.'),
+                'valor' => 'R$ '.number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->sum('valor'), 2, ',', '.'),
             ];
         }
 
         $this->stats[] = [
             'titulo' => 'Compras das duplicatas',
-            'valor' => "R$ " . number_format($compras, 2, ',', '.'),
+            'valor' => 'R$ '.number_format($compras, 2, ',', '.'),
         ];
         $this->stats[] = [
             'titulo' => 'Vendas das duplicatas',
-            'valor' => "R$ " . number_format($vendas, 2, ',', '.'),
+            'valor' => 'R$ '.number_format($vendas, 2, ',', '.'),
         ];
         $this->stats[] = [
             'titulo' => 'Gastos das duplicatas',
-            'valor' => "R$ " . number_format($gastos, 2, ',', '.'),
+            'valor' => 'R$ '.number_format($gastos, 2, ',', '.'),
         ];
         $this->stats[] = [
             'titulo' => 'Lucro',
-            'valor' => "R$ " . number_format($lucro, 2, ',', '.'),
+            'valor' => 'R$ '.number_format($lucro, 2, ',', '.'),
         ];
 
-        for ($i=1; $i <= 3; $i++) { 
+        for ($i = 1; $i <= 3; $i++) {
             $valor = Duplicata::whereBetween('vencimento', [now(), now()->addDays($i * 7)])->sum('valor');
             $pago = Duplicata::whereBetween('vencimento', [now(), now()->addDays($i * 7)])->withSum('pagamentos', 'valor')->get()->sum('pagamentos_sum_valor');
             $this->stats[] = [
-                'titulo' => "Duplicatas a receber em até " . ($i * 7) . " dias",
-                'valor' => "R$ " . number_format($valor - $pago, 2, ',', '.'),
+                'titulo' => 'Duplicatas a receber em até '.($i * 7).' dias',
+                'valor' => 'R$ '.number_format($valor - $pago, 2, ',', '.'),
             ];
         }
     }

@@ -22,6 +22,7 @@ class DuplicataFactory extends Factory
             $this->faker->randomFloat(2),
         ];
         rsort($numeros);
+
         return [
             'valor' => $numeros[0],
             'vencimento' => $this->faker->dateTimeBetween('-1 month', '+1 month'),

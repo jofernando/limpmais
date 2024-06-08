@@ -5,20 +5,14 @@ namespace App\Filament\Resources;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\ClienteResource\Pages;
 use App\Filament\Resources\ClienteResource\RelationManagers\DuplicatasRelationManager;
-use App\Filament\Resources\ClienteResource\RelationManagers\VendasRelationManager;
-use App\Forms\Components\CpfCnpj;
 use App\Models\Cliente;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Radio;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentPtbrFormFields\PtbrCpfCnpj;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
@@ -88,7 +82,7 @@ class ClienteResource extends Resource
             ])
             ->defaultSort('nome')
             ->bulkActions([
-                FilamentExportBulkAction::make('Exportar')
+                FilamentExportBulkAction::make('Exportar'),
             ])
             ->filters([
                 Cliente::statusFilter(),

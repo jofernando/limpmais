@@ -22,13 +22,12 @@ class MetodoPagamento extends Model
     public function getValorRecebidoAttribute()
     {
         $valor = $this->pagamentos->sum('valor');
+
         return number_format($valor, 2, '.', '');
     }
 
     /**
      * Get all of the pagamentos for the MetodoPagamento
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function pagamentos(): HasMany
     {

@@ -27,6 +27,7 @@ class ClientesCadastrados implements Rule
     public function passes($attribute, $value)
     {
         $exploded = explode(',', $value);
+
         return Cliente::whereIn('id', $exploded)->count() == count($exploded);
     }
 
@@ -37,6 +38,6 @@ class ClientesCadastrados implements Rule
      */
     public function message()
     {
-        return "Não existe usuário cadastrado para um dos códigos informandos.";
+        return 'Não existe usuário cadastrado para um dos códigos informandos.';
     }
 }

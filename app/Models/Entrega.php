@@ -20,8 +20,6 @@ class Entrega extends Model
 
     /**
      * Get the contrato that owns the Entrega
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function contrato(): BelongsTo
     {
@@ -30,8 +28,6 @@ class Entrega extends Model
 
     /**
      * Get the motorista that owns the Entrega
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function motorista(): BelongsTo
     {
@@ -40,8 +36,6 @@ class Entrega extends Model
 
     /**
      * Get the veiculo that owns the Entrega
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function veiculo(): BelongsTo
     {

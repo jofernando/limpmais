@@ -3,11 +3,9 @@
 namespace App\Filament\Pages;
 
 use App\Models\Cliente;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
-use Filament\Pages\Page;
 use Filament\Pages\Actions\Action;
+use Filament\Pages\Page;
 use PDF;
 
 class Imprimir extends Page
@@ -80,11 +78,12 @@ class Imprimir extends Page
 
     public function submit()
     {
-        $duplicatas = array_map(fn($item) => $this->mapHelper($item), $this->clientes);
+        $duplicatas = array_map(fn ($item) => $this->mapHelper($item), $this->clientes);
         $data = now()->format('d/m/Y');
         $hora = now()->format('H:i:s');
         $pdf = PDF::loadView('impressao.duplicatas', compact('duplicatas', 'data', 'hora'))->output();
-        return response()->streamDownload( fn () => print($pdf), "duplicatas.pdf");
+
+        return response()->streamDownload(fn () => print ($pdf), 'duplicatas.pdf');
     }
 
     private function mapHelper($item)
@@ -94,6 +93,7 @@ class Imprimir extends Page
         $item['divida'] = $cliente->divida;
         $item['nome'] = $cliente->nome;
         $item['data_vencimento'] = $cliente->duplicatas()->whereNull('pagamento')->first()?->vencimento->format('d/m/Y');
+
         return $item;
     }
 }

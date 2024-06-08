@@ -1,6 +1,5 @@
 <?php
 
-use App\Filament\Resources\ClienteResource\Widgets\ChartOverview;
 use App\Filament\Resources\ClienteResource\Widgets\StatsOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;

@@ -12,9 +12,7 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -55,8 +53,6 @@ class Duplicata extends Model
 
     /**
      * Get the cliente that owns the Duplicata
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function cliente(): BelongsTo
     {
@@ -65,8 +61,6 @@ class Duplicata extends Model
 
     /**
      * Get the veiculo that owns the Duplicata
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function veiculo(): BelongsTo
     {
@@ -80,8 +74,6 @@ class Duplicata extends Model
 
     /**
      * Get the motorista that owns the Duplicata
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function motorista(): BelongsTo
     {
@@ -90,8 +82,6 @@ class Duplicata extends Model
 
     /**
      * Get the fornecedor that owns the Duplicata
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function fornecedor(): BelongsTo
     {
@@ -106,9 +96,14 @@ class Duplicata extends Model
     public function getStatusAttribute(): string
     {
         $valor_pago = $this->pagamentos()->sum('valor');
-        if($this->valor <= $valor_pago) return 'pago';
-        if($this->vencimento < now()) return 'vencido';
-        else return 'pendente';
+        if ($this->valor <= $valor_pago) {
+            return 'pago';
+        }
+        if ($this->vencimento < now()) {
+            return 'vencido';
+        } else {
+            return 'pendente';
+        }
     }
 
     public static function getForm(): array
@@ -129,8 +124,7 @@ class Duplicata extends Model
                     DatePicker::make('venda')
                         ->required()
                         ->reactive()
-                        ->afterStateUpdated(fn ($state, Closure $set, Closure $get) => $get('prazo') ? $set('vencimento', (new Carbon($state))->addDays($get('prazo'))) : $get('vencimento'))
-                        ,
+                        ->afterStateUpdated(fn ($state, Closure $set, Closure $get) => $get('prazo') ? $set('vencimento', (new Carbon($state))->addDays($get('prazo'))) : $get('vencimento')),
                     DatePicker::make('vencimento')
                         ->required()
                         ->disabled(true)
@@ -138,22 +132,24 @@ class Duplicata extends Model
                     PtbrMoney::make('compra')->reactive(),
                     PtbrMoney::make('gastos')->reactive(),
                     Placeholder::make('final')
-                        ->content(function($get) {
+                        ->content(function ($get) {
                             $gastos = str_replace('.', '', $get('gastos'));
                             $compra = str_replace('.', '', $get('compra'));
                             $gastos = str_replace(',', '.', $gastos);
                             $compra = str_replace(',', '.', $compra);
+
                             return number_format(floatval($compra) + floatval($gastos), '2', ',', '.');
                         })
                         ->reactive(),
                     Placeholder::make('lucro')
-                        ->content(function($get) {
+                        ->content(function ($get) {
                             $gastos = str_replace('.', '', $get('gastos'));
                             $gastos = str_replace(',', '.', $gastos);
                             $compra = str_replace('.', '', $get('compra'));
                             $compra = str_replace(',', '.', $compra);
                             $valor = str_replace('.', '', $get('valor'));
                             $valor = str_replace(',', '.', $valor);
+
                             return number_format(floatval($valor) - floatval($compra) - floatval($gastos), '2', ',', '.');
                         })
                         ->reactive(),
@@ -176,11 +172,13 @@ class Duplicata extends Model
                             $result = collect($get('pagamentos'))->pluck('valor')->map(function ($item) {
                                 $valor = str_replace('.', '', $item);
                                 $valor = str_replace(',', '.', $valor);
+
                                 return floatval($valor);
                             })->sum();
                             $valor = str_replace('.', '', $get('valor'));
                             $valor = str_replace(',', '.', $valor);
-                            return "R$ " . number_format(floatval($valor) - $result, '2', ',', '.');
+
+                            return 'R$ '.number_format(floatval($valor) - $result, '2', ',', '.');
                         }),
                     MarkdownEditor::make('observacao')
                         ->label('Observação')
@@ -212,7 +210,7 @@ class Duplicata extends Model
                         ->columnSpan(2),
                 ])
                 ->columns(2),
-            
+
         ];
     }
 
@@ -243,17 +241,17 @@ class Duplicata extends Model
     public static function statusVencimento()
     {
         return Filter::make('vencimento')
-        ->form([
-            Radio::make('vencimento')
-                ->label('Vencimento')
-                ->options([
-                    7 => '7 dias',
-                    15 => '15 dias',
-                    21 => '21 dias',
-                ]),
-        ])
-        ->query(function (Builder $query, array $data): Builder {
-            return $query->when($data['vencimento'], fn (Builder $query) => $query->whereBetween('vencimento', [now(), now()->addDays($data['vencimento'])]));
-        });
+            ->form([
+                Radio::make('vencimento')
+                    ->label('Vencimento')
+                    ->options([
+                        7 => '7 dias',
+                        15 => '15 dias',
+                        21 => '21 dias',
+                    ]),
+            ])
+            ->query(function (Builder $query, array $data): Builder {
+                return $query->when($data['vencimento'], fn (Builder $query) => $query->whereBetween('vencimento', [now(), now()->addDays($data['vencimento'])]));
+            });
     }
 }

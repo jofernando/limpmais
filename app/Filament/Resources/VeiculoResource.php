@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\VeiculoResource\Pages;
-use App\Filament\Resources\VeiculoResource\RelationManagers;
 use App\Models\Veiculo;
 use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
@@ -12,8 +11,6 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class VeiculoResource extends Resource
 {
@@ -51,11 +48,11 @@ class VeiculoResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ManageVeiculos::route('/'),
         ];
-    }    
+    }
 }

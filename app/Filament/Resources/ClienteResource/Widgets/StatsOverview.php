@@ -19,13 +19,14 @@ class StatsOverview extends BaseWidget
         $compras = $duplicatas->sum('compra');
         $gastos = $duplicatas->sum('gastos');
         $lucro = $vendas - $compras - $gastos;
+
         return [
             Card::make('Clientes cadastrados', Cliente::count()),
-            Card::make('Duplicatas recebidas nos ultimos 30 dias', "R$ " . number_format($recebidos, 2, ',', '.')),
-            Card::make('Compras das duplicatas nos ultimos 30 dias', 'R$'. number_format($compras, 2, ',', '.')),
-            Card::make('Vendas das duplicatas nos ultimos 30 dias', 'R$'. number_format($vendas, 2, ',', '.')),
-            Card::make('Gastos das duplicatas nos ultimos 30 dias', 'R$'. number_format($gastos, 2, ',', '.')),
-            Card::make('Lucro estimado nos ultimos 30 dias', "R$ " . number_format($lucro, 2, ',', '.')),
+            Card::make('Duplicatas recebidas nos ultimos 30 dias', 'R$ '.number_format($recebidos, 2, ',', '.')),
+            Card::make('Compras das duplicatas nos ultimos 30 dias', 'R$'.number_format($compras, 2, ',', '.')),
+            Card::make('Vendas das duplicatas nos ultimos 30 dias', 'R$'.number_format($vendas, 2, ',', '.')),
+            Card::make('Gastos das duplicatas nos ultimos 30 dias', 'R$'.number_format($gastos, 2, ',', '.')),
+            Card::make('Lucro estimado nos ultimos 30 dias', 'R$ '.number_format($lucro, 2, ',', '.')),
         ];
     }
 }

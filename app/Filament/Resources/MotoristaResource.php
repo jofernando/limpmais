@@ -4,15 +4,12 @@ namespace App\Filament\Resources;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\MotoristaResource\Pages;
-use App\Filament\Resources\MotoristaResource\RelationManagers;
 use App\Models\Motorista;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class MotoristaResource extends Resource
 {
@@ -51,11 +48,11 @@ class MotoristaResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ManageMotoristas::route('/'),
         ];
-    }    
+    }
 }
