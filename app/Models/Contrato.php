@@ -67,12 +67,21 @@ class Contrato extends Model
         return $this->valor - ($entregue * $unitario);
     }
 
-    public function getRestanteAttribute()
+    public function getResgatadaAttribute()
     {
         if ($this->sacas != null) {
             return $this->entregas()->sum('sacas');
         } elseif ($this->toneladas != null) {
             return $this->entregas()->sum('toneladas');
+        }
+    }
+
+    public function getRestanteAttribute()
+    {
+        if ($this->sacas != null) {
+            return $this->sacas - $this->entregas()->sum('sacas');
+        } elseif ($this->toneladas != null) {
+            return $this->toneladas - $this->entregas()->sum('toneladas');
         }
     }
 }
