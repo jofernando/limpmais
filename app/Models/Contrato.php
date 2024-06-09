@@ -69,6 +69,7 @@ class Contrato extends Model
         } elseif ($this->toneladas != null) {
             return $this->entregas()->sum('toneladas');
         }
+        return 0;
     }
 
     public function getRestanteAttribute()
@@ -78,5 +79,6 @@ class Contrato extends Model
         } elseif ($this->toneladas != null) {
             return $this->toneladas - $this->entregas()->sum('toneladas');
         }
+        return 0;
     }
 }
