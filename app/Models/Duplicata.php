@@ -115,9 +115,10 @@ class Duplicata extends Model
                         ->required(),
                     Radio::make('prazo')
                         ->options([
-                            8 => 7,
-                            15 => 15,
-                            22 => 21,
+                            7 => 7,
+                            14 => 14,
+                            21 => 21,
+                            30 => 30,
                         ])
                         ->reactive()
                         ->afterStateUpdated(fn ($state, Closure $set, Closure $get) => $get('venda') ? $set('vencimento', (new Carbon($get('venda')))->addDays($state)) : $get('vencimento')),
@@ -127,7 +128,6 @@ class Duplicata extends Model
                         ->afterStateUpdated(fn ($state, Closure $set, Closure $get) => $get('prazo') ? $set('vencimento', (new Carbon($state))->addDays($get('prazo'))) : $get('vencimento')),
                     DatePicker::make('vencimento')
                         ->required()
-                        ->disabled(true)
                         ->default(now()->addDays(7)),
                     PtbrMoney::make('compra')->reactive(),
                     PtbrMoney::make('gastos')->reactive(),
@@ -246,8 +246,9 @@ class Duplicata extends Model
                     ->label('Vencimento')
                     ->options([
                         7 => '7 dias',
-                        15 => '15 dias',
+                        14 => '14 dias',
                         21 => '21 dias',
+                        30 => '30 dias',
                     ]),
             ])
             ->query(function (Builder $query, array $data): Builder {
