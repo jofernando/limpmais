@@ -143,7 +143,7 @@ class ContratosRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('valor')->money('BRL'),
                 Tables\Columns\TextColumn::make('data')->date(),
                 Tables\Columns\TextColumn::make('vigencia')->date()->label('Vigência'),
-                Tables\Columns\TextColumn::make('resgatada')->label('Qtd resgatada'),
+                Tables\Columns\TextColumn::make('resgatada')->label('Qtd retirada'),
                 Tables\Columns\TextColumn::make('restante')->label('Qtd restante'),
             ])
             ->filters([
