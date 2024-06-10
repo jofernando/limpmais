@@ -37,7 +37,7 @@ class TamanhoResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tamanho'),
-                Tables\Columns\TextColumn::make('observacao'),
+                Tables\Columns\TextColumn::make('observacao')->html(),
             ])
             ->filters([
                 //

@@ -39,7 +39,7 @@ class CorResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('cor'),
-                Tables\Columns\TextColumn::make('observacao'),
+                Tables\Columns\TextColumn::make('observacao')->html(),
             ])
             ->filters([
                 //
