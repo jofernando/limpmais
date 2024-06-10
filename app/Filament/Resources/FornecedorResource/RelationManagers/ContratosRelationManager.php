@@ -4,10 +4,8 @@ namespace App\Filament\Resources\FornecedorResource\RelationManagers;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Forms\Components\Dinheiro;
-use App\Models\Cor;
 use App\Models\Motorista;
 use App\Models\Produto;
-use App\Models\Tamanho;
 use App\Models\Veiculo;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -35,16 +33,6 @@ class ContratosRelationManager extends RelationManager
                 Select::make('produto_id')
                     ->label('Produto')
                     ->options(Produto::all()->pluck('nome', 'id')),
-                Grid::make()
-                    ->schema([
-                        Select::make('cor_id')
-                            ->label('Cor')
-                            ->options(Cor::all()->pluck('cor', 'id')),
-                        Select::make('tamanho_id')
-                            ->label('Tamanho')
-                            ->options(Tamanho::all()->pluck('tamanho', 'id')),
-                    ])
-                    ->columns(2),
                 TextInput::make('n_contrato')
                     ->label('Nº do contrato'),
                 Grid::make()
@@ -69,7 +57,6 @@ class ContratosRelationManager extends RelationManager
                     ])->required()
                     ->default('sacas')
                     ->hidden()
-
                     ->reactive(),
                 Forms\Components\TextInput::make('toneladas')
                     ->numeric()
