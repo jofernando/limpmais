@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters\Filter;
@@ -180,7 +180,7 @@ class Duplicata extends Model
 
                             return 'R$ '.number_format(floatval($valor) - $result, '2', ',', '.');
                         }),
-                    MarkdownEditor::make('observacao')
+                    RichEditor::make('observacao')
                         ->label('Observação')
                         ->columnSpan(2),
                     Select::make('fornecedor_id')

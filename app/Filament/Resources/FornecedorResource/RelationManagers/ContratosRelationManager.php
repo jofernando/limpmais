@@ -8,8 +8,8 @@ use App\Models\Produto;
 use App\Models\Veiculo;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
@@ -47,7 +47,7 @@ class ContratosRelationManager extends RelationManager
                         Forms\Components\DatePicker::make('vigencia')->label('Vigência'),
                     ])
                     ->columns(2),
-                MarkdownEditor::make('observacao')
+                RichEditor::make('observacao')
                     ->label('Observação'),
                 Forms\Components\Select::make('tipo')
                     ->options([
