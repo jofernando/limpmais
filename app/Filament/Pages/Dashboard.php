@@ -84,11 +84,12 @@ class Dashboard extends BasePage implements HasForms
             'valor' => 'R$ '.number_format($lucro, 2, ',', '.'),
         ];
 
-        for ($i = 1; $i <= 3; $i++) {
-            $valor = Duplicata::whereBetween('vencimento', [now(), now()->addDays($i * 7)])->sum('valor');
-            $pago = Duplicata::whereBetween('vencimento', [now(), now()->addDays($i * 7)])->withSum('pagamentos', 'valor')->get()->sum('pagamentos_sum_valor');
+        $prazos = [7,14,21,30];
+        foreach ($prazos as $prazo) {
+            $valor = Duplicata::whereBetween('vencimento', [now(), now()->addDays($prazo)])->sum('valor');
+            $pago = Duplicata::whereBetween('vencimento', [now(), now()->addDays($prazo)])->withSum('pagamentos', 'valor')->get()->sum('pagamentos_sum_valor');
             $this->stats[] = [
-                'titulo' => 'Duplicatas a receber em até '.($i * 7).' dias',
+                'titulo' => 'Duplicatas a receber em até '.($prazo).' dias',
                 'valor' => 'R$ '.number_format($valor - $pago, 2, ',', '.'),
             ];
         }
