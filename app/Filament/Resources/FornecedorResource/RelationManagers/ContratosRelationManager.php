@@ -30,9 +30,19 @@ class ContratosRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Select::make('produto_id')
-                    ->label('Produto')
-                    ->options(Produto::all()->pluck('nome', 'id')),
+                Grid::make()
+                    ->schema([
+                        Select::make('produto_id')
+                            ->label('Produto')
+                            ->options(Produto::all()->pluck('nome', 'id')),
+                        TextInput::make('sacas')
+                            ->label('Quilos')
+                            ->numeric()
+                            ->requiredIf('tipo', 'sacas')
+                            ->reactive()
+                            ->hidden(fn (\Closure $get) => $get('tipo') != 'sacas'),
+                    ])
+                    ->columns(2),
                 TextInput::make('n_contrato')
                     ->label('Nº do contrato'),
                 Grid::make()
@@ -66,11 +76,6 @@ class ContratosRelationManager extends RelationManager
                 PtbrMoney::make('valor_kg')
                     ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas')
                     ->reactive(),
-                Forms\Components\TextInput::make('sacas')
-                    ->label('Quantidade de sacos')
-                    ->numeric()
-                    ->requiredIf('tipo', 'sacas')
-                    ->hidden(fn (\Closure $get) => $get('tipo') != 'sacas'),
                 Grid::make()
                     ->schema([
                         Forms\Components\Repeater::make('entregas')
@@ -88,7 +93,7 @@ class ContratosRelationManager extends RelationManager
                                     ->requiredIf('tipo', 'toneladas')
                                     ->hidden(fn (\Closure $get) => $get('../../tipo') != 'toneladas'),
                                 Forms\Components\TextInput::make('sacas')
-                                    ->label('Sacos')
+                                    ->label('Quilos')
                                     ->numeric()
                                     ->requiredIf('tipo', 'sacas')
                                     ->hidden(fn (\Closure $get) => $get('../../tipo') != 'sacas'),
