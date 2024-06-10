@@ -5,15 +5,12 @@ namespace App\Filament\Resources;
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\FornecedorResource\Pages;
 use App\Filament\Resources\FornecedorResource\RelationManagers;
-use App\Forms\Components\CpfCnpj;
 use App\Models\Fornecedor;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Leandrocfe\FilamentPtbrFormFields\PtbrCpfCnpj;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 

@@ -17,12 +17,12 @@ class ClienteFactory extends Factory
     public function definition()
     {
         return [
-            "nome" => $this->faker->name,
-            "rua" => $this->faker->streetName,
-            "celular" => $this->faker->cellphoneNumber,
-            "cidade" => $this->faker->city,
-            "estado" => $this->faker->state,
-            "ponto_referencia" => $this->faker->sentence(3),
+            'nome' => $this->faker->name,
+            'rua' => $this->faker->streetName,
+            'celular' => $this->faker->cellphoneNumber,
+            'cidade' => $this->faker->city,
+            'estado' => $this->faker->state,
+            'ponto_referencia' => $this->faker->sentence(3),
             'observacao' => $this->faker->sentence(10),
             'setor' => $this->faker->sentence(1),
             'cpf_cnpj' => $this->faker->cpf(),

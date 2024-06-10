@@ -20,8 +20,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class ContratosRelationManager extends RelationManager
@@ -79,8 +77,8 @@ class ContratosRelationManager extends RelationManager
                     ->requiredIf('tipo', 'toneladas')
                     ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas'),
                 PtbrMoney::make('valor_kg')
-                        ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas')
-                        ->reactive(),
+                    ->hidden(fn (\Closure $get) => $get('tipo') != 'toneladas')
+                    ->reactive(),
                 Forms\Components\TextInput::make('sacas')
                     ->label('Quantidade de sacos')
                     ->numeric()
@@ -107,11 +105,11 @@ class ContratosRelationManager extends RelationManager
                                     ->numeric()
                                     ->requiredIf('tipo', 'sacas')
                                     ->hidden(fn (\Closure $get) => $get('../../tipo') != 'sacas'),
-                                
+
                             ])
                             ->relationship()
                             ->reactive()
-                            ->columns(2)
+                            ->columns(2),
                     ])->columns(1),
                 Grid::make()
                     ->schema([
@@ -126,6 +124,7 @@ class ContratosRelationManager extends RelationManager
                             ->content(function ($get) {
                                 $sacas = $get('sacas');
                                 $result = collect($get('entregas'))->pluck('sacas')->sum();
+
                                 return intval($sacas) - intval($result);
                             })
                             ->hidden(fn ($get) => $get('tipo') != 'sacas'),
@@ -144,6 +143,7 @@ class ContratosRelationManager extends RelationManager
                             ->content(function ($get) {
                                 $toneladas = $get('toneladas');
                                 $result = collect($get('entregas'))->pluck('toneladas')->sum();
+
                                 return number_format(floatval($toneladas) - floatval($result), 2, ',', '.');
                             })
                             ->hidden(fn ($get) => $get('tipo') != 'toneladas'),
@@ -161,6 +161,7 @@ class ContratosRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('valor')->money('BRL'),
                 Tables\Columns\TextColumn::make('data')->date(),
                 Tables\Columns\TextColumn::make('vigencia')->date()->label('Vigência'),
+                Tables\Columns\TextColumn::make('resgatada')->label('Qtd retirada'),
                 Tables\Columns\TextColumn::make('restante')->label('Qtd restante'),
             ])
             ->filters([

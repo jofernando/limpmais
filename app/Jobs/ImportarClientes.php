@@ -2,15 +2,14 @@
 
 namespace App\Jobs;
 
-use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ClienteImport;
 use App\Imports\DuplicataImport;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ImportarClientes implements ShouldQueue
 {
@@ -34,6 +33,6 @@ class ImportarClientes implements ShouldQueue
     public function handle()
     {
         // Excel::import(new ClienteImport, storage_path("app/CLIENTES.xls"));
-        Excel::import(new DuplicataImport, storage_path("app/CLIENTES.xls"));
+        Excel::import(new DuplicataImport, storage_path('app/CLIENTES.xls'));
     }
 }

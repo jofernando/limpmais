@@ -4,28 +4,15 @@ namespace App\Filament\Resources;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\DuplicataResource\Pages;
-use App\Filament\Resources\DuplicataResource\RelationManagers;
 use App\Models\Cliente;
 use App\Models\Duplicata;
-use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\DB;
-use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
 
 class DuplicataResource extends Resource
 {
@@ -57,6 +44,7 @@ class DuplicataResource extends Resource
                     ->getOptionLabelUsing(fn ($value): ?string => Cliente::find($value)?->nome),
             ])->columns(1);
         array_unshift($formulario, $grid);
+
         return $form->schema($formulario);
     }
 

@@ -14,8 +14,6 @@ class Veiculo extends Model
 
     /**
      * Get all of the duplicatas for the Veiculo
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function duplicatas(): HasMany
     {

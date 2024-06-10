@@ -17,7 +17,6 @@ class Pagamento extends Model
         'metodo_pagamento_id',
     ];
 
-
     public function duplicata(): BelongsTo
     {
         return $this->belongsTo(Duplicata::class);

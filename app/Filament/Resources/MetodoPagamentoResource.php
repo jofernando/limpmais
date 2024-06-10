@@ -4,15 +4,12 @@ namespace App\Filament\Resources;
 
 use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\MetodoPagamentoResource\Pages;
-use App\Filament\Resources\MetodoPagamentoResource\RelationManagers;
 use App\Models\MetodoPagamento;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class MetodoPagamentoResource extends Resource
 {

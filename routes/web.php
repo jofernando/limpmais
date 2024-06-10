@@ -9,9 +9,6 @@ use App\Http\Livewire\Auth\Passwords\Reset;
 use App\Http\Livewire\Auth\Passwords\Update;
 use App\Http\Livewire\Auth\Register;
 use App\Http\Livewire\Auth\Verify;
-use App\Jobs\ImportarCustomers;
-use App\Models\Customer;
-use App\Models\Duplicata;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::view('/', 'welcome')->name('home');
-Route::get('/', function() {
+Route::get('/', function () {
     return redirect('/admin');
 })->name('home');
 
@@ -43,8 +40,6 @@ Route::get('password/reset', Email::class)
 
 Route::get('password/reset/{token}', Reset::class)
     ->name('password.reset');
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('email/verify', Verify::class)

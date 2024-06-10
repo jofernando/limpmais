@@ -2,15 +2,8 @@
 
 namespace App\Http\Livewire\Auth\Passwords;
 
-use App\Models\User;
-use App\Providers\RouteServiceProvider;
-use Livewire\Component;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Auth\Events\PasswordReset;
-use Filament\Notifications\Notification;
+use Livewire\Component;
 
 class Update extends Component
 {
@@ -42,7 +35,7 @@ class Update extends Component
 
             $user->save();
 
-            $this->mensagem = "Senha alterada com sucesso.";
+            $this->mensagem = 'Senha alterada com sucesso.';
         } else {
             $this->addError('password', 'Password Incorrect');
         }

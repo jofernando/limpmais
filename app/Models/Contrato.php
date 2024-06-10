@@ -27,15 +27,13 @@ class Contrato extends Model
     ];
 
     protected $casts = [
-        'valor' => 'decimal:2'
+        'valor' => 'decimal:2',
     ];
 
     protected $appends = ['saldo_receber'];
 
     /**
      * Get the fornecedor that owns the Contrato
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function fornecedor(): BelongsTo
     {
@@ -54,8 +52,6 @@ class Contrato extends Model
 
     /**
      * Get the produto that owns the Contrato
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function produto(): BelongsTo
     {
@@ -64,8 +60,6 @@ class Contrato extends Model
 
     /**
      * Get all of the entregas for the Contrato
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function entregas(): HasMany
     {
@@ -76,15 +70,27 @@ class Contrato extends Model
     {
         $unitario = $this->valor / $this->getAttribute($this->tipo);
         $entregue = $this->entregas()->sum($this->tipo);
+
         return $this->valor - ($entregue * $unitario);
     }
 
-    public function getRestanteAttribute()
+    public function getResgatadaAttribute()
     {
         if ($this->sacas != null) {
             return $this->entregas()->sum('sacas');
         } elseif ($this->toneladas != null) {
             return $this->entregas()->sum('toneladas');
         }
+        return 0;
+    }
+
+    public function getRestanteAttribute()
+    {
+        if ($this->sacas != null) {
+            return $this->sacas - $this->entregas()->sum('sacas');
+        } elseif ($this->toneladas != null) {
+            return $this->toneladas - $this->entregas()->sum('toneladas');
+        }
+        return 0;
     }
 }

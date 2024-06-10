@@ -3,26 +3,24 @@
 namespace App\Imports;
 
 use App\Models\Duplicata;
+use Illuminate\Support\Carbon;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
-use Illuminate\Support\Carbon;
 
-class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure, WithBatchInserts
+class DuplicataImport implements SkipsEmptyRows, SkipsOnFailure, ToModel, WithBatchInserts, WithChunkReading, WithHeadingRow, WithValidation
 {
     use Importable;
 
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         $timestamp = ($row['datven'] - 25569) * 86400;
@@ -33,8 +31,10 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
             $pagamento = Carbon::createFromTimestamp($timestamp);
         }
         $pago = null;
-        if ($row['valpag'])
+        if ($row['valpag']) {
             $pago = $row['valpag'];
+        }
+
         return new Duplicata([
             'cliente_id' => $row['codcli'],
             'valor' => $row['valdup'],
@@ -61,11 +61,10 @@ class DuplicataImport implements ToModel, WithChunkReading, WithHeadingRow, With
     }
 
     /**
-     * @param Failure[] $failures
+     * @param  Failure[]  $failures
      */
     public function onFailure(Failure ...$failures)
     {
         // Handle the failures how you'd like.
     }
-
 }
