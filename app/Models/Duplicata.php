@@ -52,6 +52,16 @@ class Duplicata extends Model
     ];
 
     /**
+     * Get all of the itens for the Duplicata
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function itens(): HasMany
+    {
+        return $this->hasMany(Item::class);
+    }
+
+    /**
      * Get the cliente that owns the Duplicata
      */
     public function cliente(): BelongsTo
@@ -190,16 +200,21 @@ class Duplicata extends Model
                         ->label('Produto')
                         ->options(Produto::all()->pluck('nome', 'id')),
                     TextInput::make('outros')->label('Outros produtos')->columnSpan(2),
-                    // Select::make('tipo_quantidade')
-                    //     ->label('Tipo da quantidade')
-                    //     ->options([
-                    //         'toneladas' => 'Toneladas',
-                    //         'sacos40' => 'Sacos 40kg',
-                    //         'sacos50' => 'Sacos 50kg',
-                    //         'sacos60' => 'Sacos 60kg',
-                    //     ]),
-                    TextInput::make('quantidade')
-                        ->numeric()
+                    Repeater::make('itens')
+                        ->schema([
+                            Select::make('cor_id')
+                                ->relationship('cor', 'cor')
+                                ->required(),
+                            Select::make('tamanho_id')
+                                ->relationship('tamanho', 'tamanho')
+                                ->required(),
+                            TextInput::make('quantidade')
+                                ->numeric()
+                                ->nullable(),
+                        ])
+                        ->label('Sacos')
+                        ->relationship()
+                        ->columns(3)
                         ->columnSpan(2),
                     Select::make('motorista_id')
                         ->label('Motorista')
