@@ -211,10 +211,11 @@ class Duplicata extends Model
                             TextInput::make('quantidade')
                                 ->numeric()
                                 ->nullable(),
+                            PtbrMoney::make('valor'),
                         ])
                         ->label('Sacos')
                         ->relationship()
-                        ->columns(3)
+                        ->columns(2)
                         ->columnSpan(2),
                     Select::make('motorista_id')
                         ->label('Motorista')

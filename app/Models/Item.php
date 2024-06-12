@@ -15,6 +15,7 @@ class Item extends Model
         'cor_id',
         'quantidade',
         'duplicata_id',
+        'valor'
     ];
 
     /**
