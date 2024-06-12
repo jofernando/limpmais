@@ -20,17 +20,6 @@ class DuplicataResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    public array $data_list = [
-        'calc_columns' => [
-            'pagamento_restante',
-        ],
-    ];
-
-    protected function getTableContentFooter()
-    {
-        return view('table.footer', $this->data_list);
-    }
-
     public static function form(Form $form): Form
     {
         $formulario = Duplicata::getForm();
