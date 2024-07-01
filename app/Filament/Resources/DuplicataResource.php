@@ -45,6 +45,7 @@ class DuplicataResource extends Resource
                 Tables\Columns\TextColumn::make('cliente.nome')->sortable(),
                 Tables\Columns\TextColumn::make('valor')->money('BRL')->sortable(),
                 Tables\Columns\TextColumn::make('pagamento_restante')->money('BRL'),
+                Tables\Columns\TextColumn::make('pagamento_efetuado')->money('BRL'),
                 BadgeColumn::make('status')
                     ->colors([
                         'success' => fn ($state): bool => $state === 'pago',
