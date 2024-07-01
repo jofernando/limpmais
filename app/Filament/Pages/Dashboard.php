@@ -26,7 +26,7 @@ class Dashboard extends BasePage implements HasForms
 
     public function mount(): void
     {
-        $this->inicio = now()->startOfMonth()->addDay();
+        $this->inicio = now()->startOfMonth();
         $this->fim = now()->endOfMonth();
         $this->submit();
     }
