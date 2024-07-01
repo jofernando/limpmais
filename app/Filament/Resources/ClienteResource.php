@@ -77,6 +77,7 @@ class ClienteResource extends Resource
                 Tables\Columns\TextColumn::make('id')->label('Código'),
                 Tables\Columns\TextColumn::make('nome')->sortable(),
                 Tables\Columns\TextColumn::make('endereco')->label('Endereço'),
+                Tables\Columns\TextColumn::make('celular'),
                 Tables\Columns\TextColumn::make('divida')->money('BRL')
                     ->label('Dívida'),
             ])
