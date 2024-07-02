@@ -29,6 +29,7 @@ class DuplicatasRelationManager extends RelationManager
                 TextColumn::make('id')->label('Código'),
                 TextColumn::make('valor')->money('BRL'),
                 TextColumn::make('pagamento_restante')->money('BRL'),
+                TextColumn::make('pagamento_efetuado')->money('BRL'),
                 TextColumn::make('vencimento')->date(),
                 BadgeColumn::make('status')
                     ->colors([

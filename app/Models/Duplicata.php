@@ -103,6 +103,11 @@ class Duplicata extends Model
         return number_format($this->valor - $this->pagamentos()->sum('valor'), 2, '.', '');
     }
 
+    public function getPagamentoEfetuadoAttribute(): string
+    {
+        return number_format($this->pagamentos()->sum('valor'), 2, '.', '');
+    }
+
     public function getStatusAttribute(): string
     {
         $valor_pago = $this->pagamentos()->sum('valor');
@@ -189,6 +194,18 @@ class Duplicata extends Model
                             $valor = str_replace(',', '.', $valor);
 
                             return 'R$ '.number_format(floatval($valor) - $result, '2', ',', '.');
+                        }),
+                    PlaceHolder::make('efetuado')
+                        ->label('Pagamento efetuado')
+                        ->content(function ($get) {
+                            $result = collect($get('pagamentos'))->pluck('valor')->map(function ($item) {
+                                $valor = str_replace('.', '', $item);
+                                $valor = str_replace(',', '.', $valor);
+
+                                return floatval($valor);
+                            })->sum();
+
+                            return 'R$ '.number_format($result, '2', ',', '.');
                         }),
                     RichEditor::make('observacao')
                         ->label('Observação')
