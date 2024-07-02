@@ -60,6 +60,14 @@ class Duplicata extends Model
     }
 
     /**
+     * Get the produto that owns the Duplicata
+     */
+    public function produto(): BelongsTo
+    {
+        return $this->belongsTo(Produto::class);
+    }
+
+    /**
      * Get the veiculo that owns the Duplicata
      */
     public function veiculo(): BelongsTo
