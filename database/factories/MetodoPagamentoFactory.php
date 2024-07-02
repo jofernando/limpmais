@@ -17,7 +17,7 @@ class MetodoPagamentoFactory extends Factory
     public function definition(): array
     {
         return [
-            'tipo' => $this->faker->creditCardType(),
+            'tipo' => fake()->creditCardType(),
         ];
     }
 }
