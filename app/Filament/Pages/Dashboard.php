@@ -5,6 +5,9 @@ namespace App\Filament\Pages;
 use App\Models\Duplicata;
 use App\Models\MetodoPagamento;
 use App\Models\Pagamento;
+use App\Models\Cor;
+use App\Models\Tamanho;
+use App\Models\Item;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
@@ -92,6 +95,20 @@ class Dashboard extends BasePage implements HasForms
                 'titulo' => 'Duplicatas a receber em até '.($prazo).' dias',
                 'valor' => 'R$ '.number_format($valor - $pago, 2, ',', '.'),
             ];
+        }
+
+        $cores = Cor::all();
+        $tamanhos = Tamanho::all();
+        foreach ($cores as $cor) {
+            foreach ($tamanhos as $tamanho) {
+                $qtd = Item::whereIn('duplicata_id', $duplicatas->pluck('id'))
+                    ->where([['cor_id', $cor->id], ['tamanho_id', $tamanho->id]])
+                    ->get()->sum('quantidade');
+                $this->stats[] = [
+                    'titulo' => $cor->cor .' - '. $tamanho->tamanho,
+                    'valor' => $qtd,
+                ];
+            }
         }
     }
 }
