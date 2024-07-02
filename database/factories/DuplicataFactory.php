@@ -25,7 +25,8 @@ class DuplicataFactory extends Factory
 
         return [
             'valor' => $numeros[0],
-            'vencimento' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
+            'vencimento' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'venda' => now(),
             'observacao' => $this->faker->sentence(4),
             'compra' => $numeros[1],
             'gastos' => $numeros[2],
