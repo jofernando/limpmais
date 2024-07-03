@@ -41,6 +41,14 @@ class Cliente extends Model
         return $this->hasMany(Duplicata::class);
     }
 
+    public function getDuplicatasVencidasAttribute()
+    {
+        return $this->duplicatas()
+            ->whereRaw('valor - COALESCE((SELECT SUM(valor) FROM pagamentos WHERE duplicata_id = duplicatas.id), 0) > 0')
+            ->whereDate('vencimento', '<', now())
+            ->count();
+    }
+
     public function getIdentificacaoAttribute(): string
     {
         $rua = $this->rua;
