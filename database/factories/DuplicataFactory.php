@@ -44,4 +44,14 @@ class DuplicataFactory extends Factory
             'veiculo_id' => Veiculo::factory(),
         ];
     }
+
+    public function vencida(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'venda' => fake()->dateTimeBetween('-1 month', '-10 days'),
+                'vencimento' => now()->subDays(2),
+            ];
+        });
+    }
 }

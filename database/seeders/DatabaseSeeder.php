@@ -47,6 +47,35 @@ class DatabaseSeeder extends Seeder
                 )
             )
             ->count(30)->create();
+        Cliente::factory()->has(
+                Duplicata::factory()
+                    ->count(3)
+                    ->recycle($fornecedores)
+                    ->recycle($motoristas)
+                    ->recycle($veiculos)
+                    ->recycle($produtos)
+                    ->has(
+                        Pagamento::factory()->recycle($credcards)
+                            ->state(
+                                function (array $attributes, Duplicata $duplicata) {
+                                    return [
+                                        'valor' => $duplicata->valor,
+                                    ];
+                                }
+                            )
+                    )
+                )
+                ->count(30)->create();
+        Cliente::factory()->has(
+                Duplicata::factory()
+                    ->count(3)
+                    ->vencida()
+                    ->recycle($fornecedores)
+                    ->recycle($motoristas)
+                    ->recycle($veiculos)
+                    ->recycle($produtos)
+                )
+                ->count(30)->create();
         Cliente::factory()->count(8)->create();
         User::factory()->create();
     }
