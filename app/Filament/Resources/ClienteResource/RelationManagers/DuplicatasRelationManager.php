@@ -37,6 +37,8 @@ class DuplicatasRelationManager extends RelationManager
                         'danger' => fn ($state): bool => $state === 'vencido',
                         'warning' => fn ($state): bool => $state === 'pendente',
                     ]),
+                Tables\Columns\TextColumn::make('motorista.nome')->sortable(),
+                Tables\Columns\TextColumn::make('fornecedor.empresa')->sortable(),
             ])
             ->filters([
                 Duplicata::statusFilter(),
