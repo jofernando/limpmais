@@ -22,6 +22,16 @@ class Fornecedor extends Model
         return $this->hasMany(Contrato::class);
     }
 
+    /**
+     * Get all of the duplicatas for the Fornecedor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function duplicatas(): HasMany
+    {
+        return $this->hasMany(Duplicata::class)->with('produto');
+    }
+
     public function resgates(): HasMany
     {
         return $this->hasMany(Resgate::class);
