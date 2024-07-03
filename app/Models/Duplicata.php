@@ -289,7 +289,7 @@ class Duplicata extends Model
                     )
                     ->when(
                         $data['option'] == 'areceber',
-                        fn (Builder $query) => $query->whereHas('pagamentos', fn ($query) => $query->select(DB::raw('SUM(pagamentos.valor)'))->groupBy('duplicata_id')->havingRaw('SUM(pagamentos.valor) <> duplicatas.valor'))->orWhereDoesntHave('pagamentos')
+                        fn (Builder $query) => $query->where(fn ($query) => $query->whereHas('pagamentos', fn ($query) => $query->select(DB::raw('SUM(pagamentos.valor)'))->groupBy('duplicata_id')->havingRaw('SUM(pagamentos.valor) <> duplicatas.valor'))->orWhereDoesntHave('pagamentos'))
                     );
             });
     }
