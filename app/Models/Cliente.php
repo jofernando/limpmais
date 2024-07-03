@@ -87,6 +87,17 @@ class Cliente extends Model
                         'semdebito' => 'Sem débito',
                     ]),
             ])
+            ->indicateUsing(function (array $data): ?string {
+                if ($data['option'] != '') {
+                    $options = [
+                        'inadimplente' => 'inadimplentes',
+                        'emdias' => 'em dias',
+                        'semdebito' => 'sem débito',
+                    ];
+                    return "Clientes {$options[$data['option']]}";
+                }
+                return null;
+            })
             ->query(function (Builder $query, array $data): Builder {
                 return $query
                     ->when(
@@ -154,6 +165,7 @@ class Cliente extends Model
                                 });
                         }
                     );
-            });
+            })
+            ->indicator('Clientes');
     }
 }
