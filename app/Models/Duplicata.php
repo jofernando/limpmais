@@ -67,37 +67,6 @@ class Duplicata extends Model
         return $this->belongsTo(Produto::class);
     }
 
-    private function duplicataFornecedorProduto()
-    {
-        return Duplicata::where('fornecedor_id', $this->fornecedor_id)->where('produto_id', $this->produto_id);
-    }
-
-    public function getValorVendidoAttribute()
-    {
-        return $this->duplicataFornecedorProduto()->sum('valor');
-    }
-
-    public function getSacos50Attribute()
-    {
-        return $this->duplicataFornecedorProduto()->where('tipo_quantidade', 'sacos50')->sum('quantidade');
-    }
-
-    public function getSacos40Attribute()
-    {
-        return $this->duplicataFornecedorProduto()->where('tipo_quantidade', 'sacos40')->sum('quantidade');
-    }
-
-    public function getSacos60Attribute()
-    {
-        return $this->duplicataFornecedorProduto()->where('tipo_quantidade', 'sacos60')->sum('quantidade');
-    }
-
-
-    public function getToneladasAttribute()
-    {
-        return $this->duplicataFornecedorProduto()->where('tipo_quantidade', 'toneladas')->sum('quantidade');
-    }
-
     /**
      * Get the veiculo that owns the Duplicata
      */
