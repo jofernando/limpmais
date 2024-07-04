@@ -61,10 +61,21 @@ class Dashboard extends BasePage implements HasForms
         ];
 
         foreach (MetodoPagamento::all() as $mp) {
-            $this->stats[] = [
-                'titulo' => $mp->tipo,
-                'valor' => 'R$ '.number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->sum('valor'), 2, ',', '.'),
-            ];
+            if (! $mp->pagamento_futuro) {
+                $this->stats[] = [
+                    'titulo' => $mp->tipo,
+                    'valor' => 'R$ '.number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->sum('valor'), 2, ',', '.'),
+                ];
+            } else {
+                $this->stats[] = [
+                    'titulo' => $mp->tipo,
+                    'valor' => 'R$ '.number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->where(fn($query) => $query->where('pagamento_futuro', '<=', now())->orWhereNull('pagamento_futuro'))->sum('valor'), 2, ',', '.'),
+                ];
+                $this->stats[] = [
+                    'titulo' => $mp->tipo.' não compensado',
+                    'valor' => 'R$ '.number_format(Pagamento::whereBetween('data', $periodo)->where('metodo_pagamento_id', $mp->id)->where('pagamento_futuro', '>', now())->sum('valor'), 2, ',', '.'),
+                ];
+            }
         }
 
         $this->stats[] = [
