@@ -10,7 +10,10 @@ class MetodoPagamento extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tipo'];
+    protected $fillable = [
+        'tipo',
+        'pagamento_futuro',
+    ];
 
     /**
      * The accessors to append to the model's array form.

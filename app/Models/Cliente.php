@@ -41,6 +41,14 @@ class Cliente extends Model
         return $this->hasMany(Duplicata::class);
     }
 
+    public function getDuplicatasVencidasAttribute()
+    {
+        return $this->duplicatas()
+            ->whereRaw('valor - COALESCE((SELECT SUM(valor) FROM pagamentos WHERE duplicata_id = duplicatas.id), 0) > 0')
+            ->whereDate('vencimento', '<', now())
+            ->count();
+    }
+
     public function getIdentificacaoAttribute(): string
     {
         $rua = $this->rua;
@@ -79,6 +87,17 @@ class Cliente extends Model
                         'semdebito' => 'Sem débito',
                     ]),
             ])
+            ->indicateUsing(function (array $data): ?string {
+                if ($data['option'] != '') {
+                    $options = [
+                        'inadimplente' => 'inadimplentes',
+                        'emdias' => 'em dias',
+                        'semdebito' => 'sem débito',
+                    ];
+                    return "Clientes {$options[$data['option']]}";
+                }
+                return null;
+            })
             ->query(function (Builder $query, array $data): Builder {
                 return $query
                     ->when(
@@ -146,6 +165,7 @@ class Cliente extends Model
                                 });
                         }
                     );
-            });
+            })
+            ->indicator('Clientes');
     }
 }

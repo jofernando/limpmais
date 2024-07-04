@@ -67,6 +67,7 @@ class FornecedorResource extends Resource
         return [
             RelationManagers\ContratosRelationManager::class,
             RelationManagers\ResgatesRelationManager::class,
+            RelationManagers\DuplicatasRelationManager::class,
         ];
     }
 

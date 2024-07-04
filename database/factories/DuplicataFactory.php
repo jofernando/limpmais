@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Fornecedor;
+use App\Models\Motorista;
+use App\Models\Produto;
+use App\Models\Veiculo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,10 +20,12 @@ class DuplicataFactory extends Factory
      */
     public function definition(): array
     {
+        $qtds = [
+            'toneladas', 'sacos40', 'sacos50', 'sacos60', ];
         $numeros = [
-            $this->faker->randomFloat(2),
-            $this->faker->randomFloat(2),
-            $this->faker->randomFloat(2),
+            fake()->randomFloat(2, 10000, 15000),
+            fake()->randomFloat(2, 100, 5000),
+            fake()->randomFloat(2, 100, 5000),
         ];
         rsort($numeros);
 
@@ -30,6 +36,20 @@ class DuplicataFactory extends Factory
             'observacao' => $this->faker->sentence(4),
             'compra' => $numeros[1],
             'gastos' => $numeros[2],
+            'produto_id' => Produto::factory(),
+            'fornecedor_id' => Fornecedor::factory(),
+            'motorista_id' => Motorista::factory(),
+            'veiculo_id' => Veiculo::factory(),
         ];
+    }
+
+    public function vencida(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'venda' => fake()->dateTimeBetween('-1 month', '-10 days'),
+                'vencimento' => now()->subDays(2),
+            ];
+        });
     }
 }

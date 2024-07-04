@@ -17,15 +17,15 @@ class ClienteFactory extends Factory
     public function definition()
     {
         return [
-            'nome' => $this->faker->name,
-            'rua' => $this->faker->streetName,
-            'celular' => $this->faker->cellphoneNumber,
-            'cidade' => $this->faker->city,
-            'estado' => $this->faker->state,
-            'ponto_referencia' => $this->faker->sentence(3),
-            'observacao' => $this->faker->sentence(10),
-            'setor' => $this->faker->sentence(1),
-            'cpf_cnpj' => $this->faker->cpf(),
+            'nome' => fake()->name,
+            'rua' => fake()->streetName,
+            'celular' => fake()->cellphoneNumber,
+            'cidade' => fake()->city,
+            'estado' => fake()->state,
+            'ponto_referencia' => fake()->sentence(3),
+            'observacao' => fake()->sentence(10),
+            'setor' => fake()->sentence(1),
+            'cpf_cnpj' => fake()->cpf(),
         ];
     }
 }

@@ -70,6 +70,14 @@ class Duplicata extends Model
     }
 
     /**
+     * Get the produto that owns the Duplicata
+     */
+    public function produto(): BelongsTo
+    {
+        return $this->belongsTo(Produto::class);
+    }
+
+    /**
      * Get the veiculo that owns the Duplicata
      */
     public function veiculo(): BelongsTo
@@ -175,6 +183,14 @@ class Duplicata extends Model
                             DatePicker::make('data')->requiredWith('valor'),
                             Select::make('metodo_pagamento_id')
                                 ->relationship('metodoPagamento', 'tipo'),
+                            DatePicker::make('pagamento_futuro')
+                                ->visible(
+                                    fn($record, $get) => MetodoPagamento::query()
+                                        ->where([
+                                            'id' => $get('metodo_pagamento_id'),
+                                            'pagamento_futuro' => 1
+                                        ])->exists()
+                                ),
                         ])
                         ->defaultItems(0)
                         ->relationship()
@@ -267,7 +283,7 @@ class Duplicata extends Model
                     )
                     ->when(
                         $data['option'] == 'areceber',
-                        fn (Builder $query) => $query->whereHas('pagamentos', fn ($query) => $query->select(DB::raw('SUM(pagamentos.valor)'))->groupBy('duplicata_id')->havingRaw('SUM(pagamentos.valor) <> duplicatas.valor'))->orWhereDoesntHave('pagamentos')
+                        fn (Builder $query) => $query->where(fn ($query) => $query->whereHas('pagamentos', fn ($query) => $query->select(DB::raw('SUM(pagamentos.valor)'))->groupBy('duplicata_id')->havingRaw('SUM(pagamentos.valor) <> duplicatas.valor'))->orWhereDoesntHave('pagamentos'))
                     );
             });
     }

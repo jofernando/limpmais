@@ -4,8 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Cliente;
 use App\Models\Duplicata;
+use App\Models\Fornecedor;
 use App\Models\MetodoPagamento;
+use App\Models\Motorista;
 use App\Models\Pagamento;
+use App\Models\Produto;
 use App\Models\User;
 use App\Models\Cor;
 use App\Models\Tamanho;

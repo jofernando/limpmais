@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\MetodoPagamento>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Produto>
  */
-class MetodoPagamentoFactory extends Factory
+class ProdutoFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,7 @@ class MetodoPagamentoFactory extends Factory
     public function definition(): array
     {
         return [
-            'tipo' => fake()->creditCardType(),
+            'nome' => fake()->word,
         ];
     }
 }

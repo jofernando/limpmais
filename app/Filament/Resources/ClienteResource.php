@@ -80,6 +80,11 @@ class ClienteResource extends Resource
                 Tables\Columns\TextColumn::make('celular'),
                 Tables\Columns\TextColumn::make('divida')->money('BRL')
                     ->label('Dívida'),
+                Tables\Columns\BadgeColumn::make('duplicatas_vencidas')
+                    ->colors([
+                        'success' => static fn ($state):bool => $state == 0,
+                        'danger' => static fn ($state): bool => $state >= 1,
+                    ]),
             ])
             ->defaultSort('nome')
             ->bulkActions([

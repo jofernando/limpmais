@@ -15,6 +15,7 @@ class Pagamento extends Model
         'data',
         'duplicata_id',
         'metodo_pagamento_id',
+        'pagamento_futuro',
     ];
 
     public function duplicata(): BelongsTo
