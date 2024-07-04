@@ -173,6 +173,14 @@ class Duplicata extends Model
                             DatePicker::make('data')->requiredWith('valor'),
                             Select::make('metodo_pagamento_id')
                                 ->relationship('metodoPagamento', 'tipo'),
+                            DatePicker::make('pagamento_futuro')
+                                ->visible(
+                                    fn($record, $get) => MetodoPagamento::query()
+                                        ->where([
+                                            'id' => $get('metodo_pagamento_id'),
+                                            'pagamento_futuro' => 1
+                                        ])->exists()
+                                ),
                         ])
                         ->defaultItems(0)
                         ->relationship()

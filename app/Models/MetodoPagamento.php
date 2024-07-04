@@ -12,6 +12,7 @@ class MetodoPagamento extends Model
 
     protected $fillable = [
         'tipo',
+        'pagamento_futuro',
     ];
 
     /**
