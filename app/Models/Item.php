@@ -38,6 +38,11 @@ class Item extends Model
         return $this->belongsTo(Fornecedor::class);
     }
 
+    public function getFornecedorNomeAttribute()
+    {
+        return $this->fornecedor?->empresa;
+    }
+
     /**
      * Get the duplicata that owns the Item
      *
