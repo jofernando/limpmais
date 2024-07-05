@@ -25,21 +25,7 @@ class DuplicatasRelationManager extends RelationManager
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('id')->label('Código'),
-                TextColumn::make('valor')->money('BRL'),
-                TextColumn::make('pagamento_restante')->money('BRL'),
-                TextColumn::make('pagamento_efetuado')->money('BRL'),
-                TextColumn::make('vencimento')->date(),
-                BadgeColumn::make('status')
-                    ->colors([
-                        'success' => fn ($state): bool => $state === 'pago',
-                        'danger' => fn ($state): bool => $state === 'vencido',
-                        'warning' => fn ($state): bool => $state === 'pendente',
-                    ]),
-                Tables\Columns\TextColumn::make('motorista.nome')->sortable(),
-                Tables\Columns\TextColumn::make('fornecedor.empresa')->sortable(),
-            ])
+            ->columns(Duplicata::getColumns())
             ->filters([
                 Duplicata::statusFilter(),
                 Duplicata::statusVencimento(),
