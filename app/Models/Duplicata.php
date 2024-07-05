@@ -222,6 +222,7 @@ class Duplicata extends Model
                                     'sacos40' => 'Sacos 40kg',
                                     'sacos50' => 'Sacos 50kg',
                                     'sacos60' => 'Sacos 60kg',
+                                    'unidade' => 'Unidades',
                                 ]),
                             TextInput::make('quantidade')
                                 ->numeric(),
