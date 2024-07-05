@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cliente;
 use App\Models\Fornecedor;
 use App\Models\Motorista;
 use App\Models\Produto;
@@ -29,17 +30,14 @@ class DuplicataFactory extends Factory
 
         return [
             'valor' => $numeros[0],
-            'tipo_quantidade' => fake()->randomElement(['toneladas', 'sacos40', 'sacos50', 'sacos60', 'unidades']),
-            'quantidade' => fake()->randomNumber(4),
             'vencimento' => fake()->dateTimeBetween('now', '+1 month'),
             'venda' => now(),
             'observacao' => fake()->sentence(4),
             'compra' => $numeros[1],
             'gastos' => $numeros[2],
-            'produto_id' => Produto::factory(),
-            'fornecedor_id' => Fornecedor::factory(),
             'motorista_id' => Motorista::factory(),
             'veiculo_id' => Veiculo::factory(),
+            'cliente_id' => Cliente::factory(),
         ];
     }
 

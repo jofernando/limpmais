@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Cliente;
 use App\Models\Duplicata;
 use App\Models\Fornecedor;
+use App\Models\Item;
 use App\Models\MetodoPagamento;
 use App\Models\Motorista;
 use App\Models\Pagamento;
@@ -26,14 +27,12 @@ class DatabaseSeeder extends Seeder
         $fornecedores = Fornecedor::factory()->count(5)->create();
         $motoristas = Motorista::factory()->count(5)->create();
         $veiculos = Veiculo::factory()->count(5)->create();
-        $produtos = Produto::factory()->count(10)->create();
+        $produtos = Produto::factory()->count(3)->create();
         Cliente::factory()->has(
             Duplicata::factory()
                 ->count(3)
-                ->recycle($fornecedores)
                 ->recycle($motoristas)
                 ->recycle($veiculos)
-                ->recycle($produtos)
                 ->has(
                     Pagamento::factory()->count(2)
                         ->recycle($credcards)
@@ -45,15 +44,19 @@ class DatabaseSeeder extends Seeder
                             }
                         )
                 )
+                ->has(
+                    Item::factory()->count(2)
+                        ->recycle($produtos)
+                        ->recycle($fornecedores),
+                    'itens'
+                )
             )
             ->count(30)->create();
         Cliente::factory()->has(
                 Duplicata::factory()
                     ->count(3)
-                    ->recycle($fornecedores)
                     ->recycle($motoristas)
                     ->recycle($veiculos)
-                    ->recycle($produtos)
                     ->has(
                         Pagamento::factory()->recycle($credcards)
                             ->state(
@@ -64,16 +67,26 @@ class DatabaseSeeder extends Seeder
                                 }
                             )
                     )
+                    ->has(
+                        Item::factory()->count(2)
+                            ->recycle($produtos)
+                            ->recycle($fornecedores),
+                        'itens'
+                    )
                 )
                 ->count(30)->create();
         Cliente::factory()->has(
                 Duplicata::factory()
                     ->count(3)
                     ->vencida()
-                    ->recycle($fornecedores)
                     ->recycle($motoristas)
                     ->recycle($veiculos)
-                    ->recycle($produtos)
+                    ->has(
+                        Item::factory()->count(2)
+                            ->recycle($produtos)
+                            ->recycle($fornecedores),
+                        'itens'
+                    )
                 )
                 ->count(30)->create();
         Cliente::factory()->count(8)->create();
