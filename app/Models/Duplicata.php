@@ -34,16 +34,12 @@ class Duplicata extends Model
         'cliente_id',
         'compra',
         'gastos',
-        'produto_id',
-        'tipo_quantidade',
-        'quantidade',
         'folguista',
         'prazo',
         'venda',
         'outros',
         'motorista_id',
         'veiculo_id',
-        'fornecedor_id',
     ];
 
     protected $casts = [
@@ -60,11 +56,13 @@ class Duplicata extends Model
     }
 
     /**
-     * Get the produto that owns the Duplicata
+     * Get all of the itens for the Duplicata
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function produto(): BelongsTo
+    public function itens(): HasMany
     {
-        return $this->belongsTo(Produto::class);
+        return $this->hasMany(Item::class);
     }
 
     /**
@@ -86,14 +84,6 @@ class Duplicata extends Model
     public function motorista(): BelongsTo
     {
         return $this->belongsTo(Motorista::class);
-    }
-
-    /**
-     * Get the fornecedor that owns the Duplicata
-     */
-    public function fornecedor(): BelongsTo
-    {
-        return $this->belongsTo(Fornecedor::class);
     }
 
     public function getPagamentoRestanteAttribute(): string
@@ -216,23 +206,30 @@ class Duplicata extends Model
                     RichEditor::make('observacao')
                         ->label('Observação')
                         ->columnSpan(2),
-                    Select::make('fornecedor_id')
-                        ->label('Fornecedor')
-                        ->options(Fornecedor::all()->pluck('empresa', 'id')),
-                    Select::make('produto_id')
-                        ->label('Produto')
-                        ->options(Produto::all()->pluck('nome', 'id')),
+                    Repeater::make('itens')
+                        ->label('Produtos')
+                        ->schema([
+                            Select::make('fornecedor_id')
+                                ->label('Fornecedor')
+                                ->options(Fornecedor::all()->pluck('empresa', 'id')),
+                            Select::make('produto_id')
+                                ->label('Produto')
+                                ->options(Produto::all()->pluck('nome', 'id')),
+                            Select::make('tipo_quantidade')
+                                ->label('Tipo da quantidade')
+                                ->options([
+                                    'toneladas' => 'Toneladas',
+                                    'sacos40' => 'Sacos 40kg',
+                                    'sacos50' => 'Sacos 50kg',
+                                    'sacos60' => 'Sacos 60kg',
+                                ]),
+                            TextInput::make('quantidade')
+                                ->numeric(),
+                        ])
+                        ->relationship()
+                        ->columns(2)
+                        ->columnSpan(2),
                     TextInput::make('outros')->label('Outros produtos')->columnSpan(2),
-                    Select::make('tipo_quantidade')
-                        ->label('Tipo da quantidade')
-                        ->options([
-                            'toneladas' => 'Toneladas',
-                            'sacos40' => 'Sacos 40kg',
-                            'sacos50' => 'Sacos 50kg',
-                            'sacos60' => 'Sacos 60kg',
-                        ]),
-                    TextInput::make('quantidade')
-                        ->numeric(),
                     Select::make('motorista_id')
                         ->label('Motorista')
                         ->options(Motorista::all()->pluck('nome', 'id')),

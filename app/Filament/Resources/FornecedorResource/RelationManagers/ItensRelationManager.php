@@ -14,9 +14,9 @@ use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class DuplicatasRelationManager extends RelationManager
+class ItensRelationManager extends RelationManager
 {
-    protected static string $relationship = 'duplicatas';
+    protected static string $relationship = 'itens';
 
     protected static ?string $modelLabel = 'produto';
 
@@ -25,10 +25,11 @@ class DuplicatasRelationManager extends RelationManager
     protected function getTableQuery(): Builder | Relation
     {
         return parent::getTableQuery()
-            ->orderBy('produto_id')
-            ->orderBy('tipo_quantidade')
-            ->groupBy('produto_id', 'tipo_quantidade')
-            ->select('produto_id', 'tipo_quantidade', DB::raw('SUM(quantidade) as total_quantidade'), DB::raw('SUM(valor) as total_valor'));
+            ->join('duplicatas', 'items.duplicata_id', 'duplicatas.id')
+            ->orderBy('items.produto_id')
+            ->orderBy('items.tipo_quantidade')
+            ->groupBy('items.produto_id', 'items.tipo_quantidade')
+            ->select('items.produto_id', 'items.tipo_quantidade', DB::raw('SUM(items.quantidade) as total_quantidade'), DB::raw('SUM(duplicatas.valor) as total_valor'));
     }
 
     public function getTableRecordKey(Model $record): string
@@ -71,11 +72,11 @@ class DuplicatasRelationManager extends RelationManager
                         return $query
                             ->when(
                                 $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('venda', '>=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('duplicatas.venda', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('venda', '<=', $date),
+                                fn (Builder $query, $date): Builder => $query->whereDate('duplicatas.venda', '<=', $date),
                             );
                     })
             ])

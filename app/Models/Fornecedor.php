@@ -27,9 +27,9 @@ class Fornecedor extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function duplicatas(): HasMany
+    public function itens(): HasMany
     {
-        return $this->hasMany(Duplicata::class)->with('produto');
+        return $this->hasMany(Item::class)->with('produto')->with('duplicata');
     }
 
     public function resgates(): HasMany
