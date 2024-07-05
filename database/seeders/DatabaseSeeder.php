@@ -13,7 +13,6 @@ use App\Models\Produto;
 use App\Models\User;
 use App\Models\Cor;
 use App\Models\Tamanho;
-use App\Models\Item;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,11 +25,15 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $credcards = MetodoPagamento::factory()->count(2)->create();
+        $fornecedores = Fornecedor::factory()->count(3)->create();
+        $produtos = Produto::factory()->count(3)->create();
         $cores = Cor::factory()->count(5)->create();
         $tamanhos = Tamanho::factory()->count(5)->create();
         Cliente::factory()->has(
             Duplicata::factory()
                 ->count(3)
+                ->recycle($produtos)
+                ->recycle($fornecedores)
                 ->hasPagamentos(2, function (array $attributes, Duplicata $duplicata) use ($credcards) {
                     return [
                         'valor' => $duplicata->valor / 3,

@@ -289,7 +289,7 @@ class Duplicata extends Model
                     'warning' => fn ($state): bool => $state === 'pendente',
                 ]),
             TextColumn::make('motorista.nome')->sortable(),
-            TextColumn::make('fornecedores_nomes')->label('Fornecedores'),
+            TextColumn::make('fornecedor.empresa'),
         ];
     }
 

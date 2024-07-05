@@ -40,6 +40,8 @@ class DuplicataFactory extends Factory
             'motorista_id' => Motorista::factory(),
             'veiculo_id' => Veiculo::factory(),
             'cliente_id' => Cliente::factory(),
+            'produto_id' => Produto::factory(),
+            'fornecedor_id' => Fornecedor::factory(),
         ];
     }
 
