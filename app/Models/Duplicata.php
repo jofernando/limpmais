@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentPtbrFormFields\PtbrMoney;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
 
 class Duplicata extends Model
 {
@@ -88,6 +90,11 @@ class Duplicata extends Model
     public function pagamentos(): HasMany
     {
         return $this->hasMany(Pagamento::class);
+    }
+
+    public function getFornecedoresNomesAttribute()
+    {
+        return $this->itens()->with('fornecedor')->get()->map(fn($i) => $i->fornecedor->empresa)->unique()->join(', ');
     }
 
     /**
@@ -261,6 +268,28 @@ class Duplicata extends Model
                 ])
                 ->columns(2),
 
+        ];
+    }
+
+    public static function getColumns(): array
+    {
+        return [
+            TextColumn::make('id')->label('Código'),
+            TextColumn::make('valor')->money('BRL')->sortable(),
+            TextColumn::make('compra')->money('BRL')->sortable(),
+            TextColumn::make('gastos')->money('BRL')->sortable(),
+            TextColumn::make('pagamento_restante')->money('BRL'),
+            TextColumn::make('pagamento_efetuado')->money('BRL'),
+            TextColumn::make('venda')->date(),
+            TextColumn::make('vencimento')->date(),
+            BadgeColumn::make('status')
+                ->colors([
+                    'success' => fn ($state): bool => $state === 'pago',
+                    'danger' => fn ($state): bool => $state === 'vencido',
+                    'warning' => fn ($state): bool => $state === 'pendente',
+                ]),
+            TextColumn::make('motorista.nome')->sortable(),
+            TextColumn::make('fornecedores_nomes')->label('Fornecedores'),
         ];
     }
 

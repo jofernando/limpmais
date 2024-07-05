@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Cliente;
 use App\Models\Duplicata;
 use App\Models\Fornecedor;
+use App\Models\Item;
 use App\Models\MetodoPagamento;
 use App\Models\Motorista;
 use App\Models\Pagamento;

@@ -39,23 +39,11 @@ class DuplicataResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $tabela = Duplicata::getColumns();
+        $cliente = Tables\Columns\TextColumn::make('cliente.nome')->sortable();
+        array_unshift($tabela, $cliente);
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('id')->label('Código'),
-                Tables\Columns\TextColumn::make('cliente.nome')->sortable(),
-                Tables\Columns\TextColumn::make('valor')->money('BRL')->sortable(),
-                Tables\Columns\TextColumn::make('pagamento_restante')->money('BRL'),
-                Tables\Columns\TextColumn::make('pagamento_efetuado')->money('BRL'),
-                Tables\Columns\TextColumn::make('vencimento')->date(),
-                BadgeColumn::make('status')
-                    ->colors([
-                        'success' => fn ($state): bool => $state === 'pago',
-                        'danger' => fn ($state): bool => $state === 'vencido',
-                        'warning' => fn ($state): bool => $state === 'pendente',
-                    ]),
-                Tables\Columns\TextColumn::make('motorista.nome')->sortable(),
-                Tables\Columns\TextColumn::make('fornecedor.empresa')->sortable(),
-            ])
+            ->columns($tabela)
             ->filters([
                 Duplicata::statusFilter(),
                 Duplicata::statusVencimento(),

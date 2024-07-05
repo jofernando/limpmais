@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cliente;
 use App\Models\Fornecedor;
 use App\Models\Motorista;
 use App\Models\Produto;
@@ -36,10 +37,9 @@ class DuplicataFactory extends Factory
             'observacao' => $this->faker->sentence(4),
             'compra' => $numeros[1],
             'gastos' => $numeros[2],
-            'produto_id' => Produto::factory(),
-            'fornecedor_id' => Fornecedor::factory(),
             'motorista_id' => Motorista::factory(),
             'veiculo_id' => Veiculo::factory(),
+            'cliente_id' => Cliente::factory(),
         ];
     }
 
