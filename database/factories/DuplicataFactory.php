@@ -20,8 +20,6 @@ class DuplicataFactory extends Factory
      */
     public function definition(): array
     {
-        $qtds = [
-            'toneladas', 'sacos40', 'sacos50', 'sacos60', ];
         $numeros = [
             fake()->randomFloat(2, 10000, 15000),
             fake()->randomFloat(2, 100, 5000),
@@ -31,7 +29,7 @@ class DuplicataFactory extends Factory
 
         return [
             'valor' => $numeros[0],
-            'tipo_quantidade' => fake()->randomElement(['toneladas', 'sacos40', 'sacos50', 'sacos60']),
+            'tipo_quantidade' => fake()->randomElement(['toneladas', 'sacos40', 'sacos50', 'sacos60', 'unidades']),
             'quantidade' => fake()->randomNumber(4),
             'vencimento' => fake()->dateTimeBetween('now', '+1 month'),
             'venda' => now(),
