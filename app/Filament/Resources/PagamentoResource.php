@@ -6,6 +6,7 @@ use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Resources\PagamentoResource\Pages;
 use App\Filament\Resources\PagamentoResource\RelationManagers;
 use App\Models\Pagamento;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -13,6 +14,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -53,7 +55,36 @@ class PagamentoResource extends Resource
                 TextColumn::make('duplicata.fornecedores_nomes')->label('Fornecedores'),
             ])
             ->filters([
-                //
+                Filter::make('data')
+                    ->form([
+                        Forms\Components\DatePicker::make('created_from')->label('Inicio')->default(now()->startOfMonth()),
+                        Forms\Components\DatePicker::make('created_until')->label('Fim')->default(now()->endOfMonth()),
+                    ])
+                    ->indicateUsing(function (array $data): ?string {
+                        if (! $data['created_from'] and ! $data['created_until']) {
+                            return null;
+                        }
+                        $msg = 'Pagamentos ';
+                        if ($data['created_from']) {
+                            $msg = $msg.' a partir de '.Carbon::parse($data['created_from'])->toFormattedDateString();
+                        }
+                        if ($data['created_until']) {
+                            $msg = $msg.' até '.Carbon::parse($data['created_until'])->toFormattedDateString();
+                        }
+
+                        return $msg;
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('data', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('data', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
             ])
