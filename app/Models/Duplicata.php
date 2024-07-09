@@ -283,8 +283,23 @@ class Duplicata extends Model
                     ->options([
                         'liquidadas' => 'Líquidadas',
                         'areceber' => 'A receber',
-                    ]),
+                    ])
+                    ->default('areceber'),
             ])
+            ->indicateUsing(function (array $data): ?string {
+                if (! $data['option']) {
+                    return null;
+                }
+                $msg = 'Duplicatas ';
+                if ($data['option'] == 'liquidadas') {
+                    $msg = $msg.' líquidadas';
+                }
+                if ($data['option'] == 'areceber') {
+                    $msg = $msg.' a receber';
+                }
+
+                return $msg;
+            })
             ->query(function (Builder $query, array $data): Builder {
                 return $query
                     ->when(
@@ -311,6 +326,14 @@ class Duplicata extends Model
                         30 => '30 dias',
                     ]),
             ])
+            ->indicateUsing(function (array $data): ?string {
+                if (! $data['vencimento']) {
+                    return null;
+                }
+                $msg = "Vencimento em {$data['vencimento']} dias";
+
+                return $msg;
+            })
             ->query(function (Builder $query, array $data): Builder {
                 return $query->when($data['vencimento'], fn (Builder $query) => $query->whereBetween('vencimento', [now(), now()->addDays($data['vencimento'])]));
             });
