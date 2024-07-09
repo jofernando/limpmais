@@ -19,6 +19,8 @@ class MetodoPagamentoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+    protected static ?int $navigationSort = 4;
+
     protected static ?string $modelLabel = 'método de pagamento';
 
     protected static ?string $pluralModelLabel = 'métodos de pagamento';

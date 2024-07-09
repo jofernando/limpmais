@@ -20,6 +20,8 @@ class DuplicataResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         $formulario = Duplicata::getForm();
