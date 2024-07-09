@@ -29,7 +29,7 @@ class ItensRelationManager extends RelationManager
             ->orderBy('items.produto_id')
             ->orderBy('items.tipo_quantidade')
             ->groupBy('items.produto_id', 'items.tipo_quantidade')
-            ->select('items.produto_id', 'items.tipo_quantidade', DB::raw('SUM(items.quantidade) as total_quantidade'), DB::raw('SUM(duplicatas.valor) as total_valor'));
+            ->select('items.produto_id', 'items.tipo_quantidade', DB::raw('SUM(items.quantidade) as total_quantidade'), DB::raw('SUM(duplicatas.valor) as total_valor'), DB::raw('SUM(duplicatas.gastos) as total_gastos'), DB::raw('SUM(duplicatas.compra) as total_compra'));
     }
 
     public function getTableRecordKey(Model $record): string
@@ -46,7 +46,9 @@ class ItensRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('produto.nome'),
                 Tables\Columns\TextColumn::make('tipo_quantidade')->label('Tipo'),
                 Tables\Columns\TextColumn::make('total_quantidade')->label('Quantidade'),
-                Tables\Columns\TextColumn::make('total_valor')->money('BRL')->label('Valor das duplicatas'),
+                Tables\Columns\TextColumn::make('total_valor')->money('BRL')->label('Valor de venda das duplicatas'),
+                Tables\Columns\TextColumn::make('total_compra')->money('BRL')->label('Valor de compra das duplicatas'),
+                Tables\Columns\TextColumn::make('total_gastos')->money('BRL')->label('Valor de gastos das duplicatas'),
             ])
             ->filters([
                 Filter::make('created_at')
