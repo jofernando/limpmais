@@ -22,6 +22,8 @@ class ClienteResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+    protected static ?int $navigationSort = 1;
+
     public static function getGloballySearchableAttributes(): array
     {
         return ['nome', 'id'];

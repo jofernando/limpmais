@@ -20,6 +20,8 @@ class FornecedorResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+    protected static ?int $navigationSort = 5;
+
     protected static ?string $modelLabel = 'fornecedores';
 
     public static function form(Form $form): Form
