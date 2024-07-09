@@ -94,7 +94,7 @@ class Duplicata extends Model
 
     public function getFornecedoresNomesAttribute()
     {
-        return $this->itens()->with('fornecedor')->get()->map(fn($i) => $i->fornecedor->empresa)->unique()->join(', ');
+        return $this->fornecedor?->empresa;
     }
 
     /**
